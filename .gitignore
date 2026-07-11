@@ -1,0 +1,12 @@
+.DS_Store
+.superpowers/
+.gradle/
+.idea/
+**/build/
+local.properties
+*.iml
+*.xcuserstate
+xcuserdata/
+DerivedData/
+.kotlin/
+
