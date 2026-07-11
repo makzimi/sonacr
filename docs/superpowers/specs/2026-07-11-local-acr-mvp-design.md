@@ -225,7 +225,7 @@ The winning offset maps session time to cue time. `matchedPositionMs` is the est
 
 ## 8. Real-time concurrency and memory
 
-Each recognition session owns:
+Each recognizer instance owns one validated read-only database connection. Each active listening session owns:
 
 - one platform capture source;
 - one preallocated single-producer/single-consumer PCM queue;
@@ -350,7 +350,7 @@ Required metadata keys are:
 - `database_version`;
 - `content_digest_sha256`.
 
-The digest is SHA-256 over length-prefixed canonical UTF-8 metadata, trigger rows, and fingerprint rows sorted by their primary keys. It does not hash SQLite page bytes. The builder uses a fixed page size, fixed creation pragmas, sorted insertion, and final `VACUUM`, but the semantic digest—not raw file equality—is the cross-platform reproducibility contract.
+The digest is SHA-256 over length-prefixed canonical UTF-8 metadata, trigger rows, and fingerprint rows sorted by their primary keys. The `content_digest_sha256` metadata row itself is excluded from this input, avoiding a circular digest. It does not hash SQLite page bytes. The builder uses a fixed page size, fixed creation pragmas, sorted insertion, and final `VACUUM`, but the semantic digest—not raw file equality—is the cross-platform reproducibility contract.
 
 At runtime, the engine opens the file read-only and immutable, enables query-only and foreign-key checks, validates metadata/profile, runs an integrity check, and recomputes the content digest before reporting `Ready`. It never writes a journal or modifies the database.
 
@@ -535,4 +535,3 @@ These gates apply to the version-controlled MVP corpus and device matrix. They a
 - A single immutable SQLite artifact is adequate for MVP scale and leaves room for a future indexed format without changing the public KMP API.
 - Conservative multi-gate matching intentionally trades some recall for promotion/check-in safety.
 - Foreground-only listening keeps the first release within clear lifecycle, battery, and privacy boundaries.
-
