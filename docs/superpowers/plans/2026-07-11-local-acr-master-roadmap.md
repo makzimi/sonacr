@@ -24,7 +24,7 @@ For every checkpoint:
 
 | # | Checkpoint | Deliverable | Depends on | Commit message | Status |
 |---|---|---|---|---|---|
-| 1 | Portable native build | Reproducible C++20/CMake host and mobile-library build with CTest, warnings, strict FP, sanitizers, and dependency provenance. | — | `build: bootstrap portable native core` | planned |
+| 1 | Portable native build | Reproducible C++20/CMake host and mobile-library build with CTest, warnings, strict FP, sanitizers, and dependency provenance. | — | `build: bootstrap portable native core` | committed |
 | 2 | PCM ingress | Validated S16/F32 layouts, deterministic channel downmixing, and source-frame continuity. | 1 | `feat: add deterministic PCM ingress` | planned |
 | 3 | Canonical frames | SpeexDSP resampling, delay compensation, Q1.23 quantization, Hann framing, and chunk invariance. | 2 | `feat: produce canonical analysis frames` | planned |
 | 4 | Spectral decisions | Scalar KISS FFT power, deterministic logarithmic weighting, and Q16.16 temporal filtering. | 3 | `feat: add deterministic spectral analysis` | planned |
@@ -66,7 +66,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 
 | # | Commit | Verification evidence |
 |---|---|---|
-| 1–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 1 | `build: bootstrap portable native core` | Debug, ASan/UBSan, and TSan: 3/3 tests each; iOS simulator static library built; Android API 26 and Linux presets parsed. |
+| 2–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "dependencies": [
+    {
+      "name": "kissfft",
+      "version": "131.2.0",
+      "url": "https://github.com/mborgerding/kissfft/archive/refs/tags/131.2.0.tar.gz",
+      "sha256": "205a8f6a448ef12b091f8ac6a514b5091bb5f6b0b543431ed75f673116cf5cbf",
+      "spdxLicense": "BSD-3-Clause",
+      "noticePath": "third_party/notices/kissfft-COPYING",
+      "compileOptions": [
+        "scalar-only",
+        "float32",
+        "openmp=off",
+        "simd=off",
+        "tools=off",
+        "tests=off"
+      ]
+    },
+    {
+      "name": "speexdsp",
+      "version": "1.2.1",
+      "url": "https://downloads.xiph.org/releases/speex/speexdsp-1.2.1.tar.gz",
+      "sha256": "8c777343e4a6399569c72abc38a95b24db56882c83dbdb6c6424a5f4aeb54d3d",
+      "spdxLicense": "BSD-3-Clause",
+      "noticePath": "third_party/notices/speexdsp-COPYING",
+      "compileOptions": [
+        "static-only",
+        "resampler-only",
+        "quality=5",
+        "tests=off"
+      ]
+    },
+    {
+      "name": "sqlite",
+      "version": "3.53.3",
+      "url": "https://www.sqlite.org/2026/sqlite-amalgamation-3530300.zip",
+      "sha256": "646421e12aac110282ef8cc68f1a62d4bb15fc7b8f09da0b53e29ee690500431",
+      "upstreamSha3_256": "d45c688a8cb23f68611a894a756a12d7eb6ab6e9e2468ca70adbeab3808b5ab9",
+      "spdxLicense": "blessing",
+      "noticePath": "third_party/notices/sqlite-PUBLIC-DOMAIN.txt",
+      "compileOptions": [
+        "SQLITE_THREADSAFE=1",
+        "SQLITE_DEFAULT_FOREIGN_KEYS=1",
+        "SQLITE_DQS=0",
+        "SQLITE_OMIT_DEPRECATED",
+        "SQLITE_OMIT_LOAD_EXTENSION",
+        "SQLITE_OMIT_SHARED_CACHE",
+        "SQLITE_USE_URI=1"
+      ]
+    }
+  ]
+}

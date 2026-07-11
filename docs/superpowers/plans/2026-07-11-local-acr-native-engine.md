@@ -78,17 +78,17 @@ native/tests/support/*                Test assertions, fixtures, fake clocks/sou
 - Consumes: no earlier production interface.
 - Produces: `uint32_t lacr_version_abi(void)` returning `1`; CMake target `local_acr_core`; CTest label `native-unit`.
 
-- [ ] **Step 1: Write the first failing native test**
+- [x] **Step 1: Write the first failing native test**
 
 Create `native/tests/unit/version_test.cpp` with a process-returning assertion that includes `local_acr/version.h`, calls `lacr_version_abi()`, and returns nonzero unless the value is exactly `1`.
 
-- [ ] **Step 2: Configure to verify the red state**
+- [x] **Step 2: Compile directly to verify the red state**
 
-Run: `cmake --preset macos-clang-debug`
+Run: `clang++ -std=c++20 -I native/core/include native/tests/unit/version_test.cpp -o /private/tmp/lacr_version_test`
 
-Expected: configuration fails because `local_acr/version.h` and the `local_acr_core` source do not yet exist.
+Expected: compilation fails with `fatal error: 'local_acr/version.h' file not found`, proving the public version contract is absent before the build scaffold is added.
 
-- [ ] **Step 3: Add the minimal public version contract and build graph**
+- [x] **Step 3: Add the minimal public version contract and build graph**
 
 Use this exact public contract in `native/core/include/local_acr/version.h`:
 
@@ -113,15 +113,15 @@ uint32_t lacr_version_abi(void);
 
 Implement `lacr_version_abi()` as an exception-free function returning `1`. Configure `local_acr_core` as a static C++20 library with hidden symbols by default, explicit public include directories, strict warnings, and no compiler extensions. Enable CTest only when `LACR_BUILD_TESTS=ON`.
 
-- [ ] **Step 4: Add reproducible presets and verification profiles**
+- [x] **Step 4: Add reproducible presets and verification profiles**
 
 Define `macos-clang-debug`, `macos-asan`, and `macos-tsan` configure/build/test presets using Ninja, `CMAKE_EXPORT_COMPILE_COMMANDS=ON`, and separate build directories under `build/`. Apply ASan+UBSan together; apply TSan alone. `StrictFp.cmake` must reject fast-math and add `-ffp-contract=off` to future fingerprint-profile sources.
 
-- [ ] **Step 5: Record dependency provenance before compiling dependencies**
+- [x] **Step 5: Record dependency provenance before compiling dependencies**
 
-Populate `third_party/dependencies.lock.json` with schema version `1` and the exact URLs and digests in the pinned-source table above. Use SPDX `BSD-3-Clause` for KISS FFT and SpeexDSP and `LicenseRef-SQLite-Public-Domain` for SQLite. Notice paths are `third_party/notices/kissfft-COPYING`, `third_party/notices/speexdsp-COPYING`, and `third_party/notices/sqlite-PUBLIC-DOMAIN.txt`. Record scalar Float32/no-OpenMP/no-SIMD for KISS FFT, resampler-only/quality-5 for SpeexDSP, and the Section 10 SQLite compile flags. `cmake/Dependencies.cmake` must fail configuration when an archive digest differs from the lock.
+Populate `third_party/dependencies.lock.json` with schema version `1` and the exact URLs and digests in the pinned-source table above. Use SPDX `BSD-3-Clause` for KISS FFT and SpeexDSP and `blessing` for SQLite. Notice paths are `third_party/notices/kissfft-COPYING`, `third_party/notices/speexdsp-COPYING`, and `third_party/notices/sqlite-PUBLIC-DOMAIN.txt`. Record scalar Float32/no-OpenMP/no-SIMD for KISS FFT, resampler-only/quality-5 for SpeexDSP, and the Section 10 SQLite compile flags. `cmake/Dependencies.cmake` must fail configuration when an archive digest differs from the lock.
 
-- [ ] **Step 6: Run the green build and test**
+- [x] **Step 6: Run the green build and test**
 
 Run: `cmake --preset macos-clang-debug`
 
@@ -135,7 +135,7 @@ Run: `ctest --preset macos-clang-debug --output-on-failure`
 
 Expected: one `native-unit` test passes.
 
-- [ ] **Step 7: Verify and commit checkpoint 1**
+- [x] **Step 7: Verify and commit checkpoint 1**
 
 Run: `git diff --check`
 

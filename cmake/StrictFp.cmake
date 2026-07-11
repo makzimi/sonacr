@@ -1,0 +1,7 @@
+function(lacr_apply_strict_fp target)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
+    target_compile_options("${target}" PRIVATE -fno-fast-math -ffp-contract=off)
+  else()
+    message(FATAL_ERROR "Unsupported compiler for strict floating-point policy: ${CMAKE_CXX_COMPILER_ID}")
+  endif()
+endfunction()

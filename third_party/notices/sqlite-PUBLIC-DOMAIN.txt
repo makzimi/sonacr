@@ -1,0 +1,8 @@
+SQLite 3.53.3
+
+SQLite is in the public domain. The upstream copyright and blessing statement
+is maintained at https://www.sqlite.org/copyright.html.
+
+The SQLite source code is not governed by a copyright license. The SPDX
+identifier `blessing` is used in project provenance to represent the upstream
+SQLite blessing.
