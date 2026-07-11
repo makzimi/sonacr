@@ -32,6 +32,17 @@ lacr_apply_strict_fp(resampler_test)
 add_test(NAME resampler_test COMMAND resampler_test)
 set_tests_properties(resampler_test PROPERTIES LABELS native-unit)
 
+add_executable(frame_stream_test unit/frame_stream_test.cpp)
+target_link_libraries(frame_stream_test PRIVATE local_acr_core)
+target_include_directories(frame_stream_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(frame_stream_test PRIVATE cxx_std_20)
+lacr_apply_warnings(frame_stream_test)
+lacr_apply_sanitizers(frame_stream_test)
+lacr_apply_strict_fp(frame_stream_test)
+
+add_test(NAME frame_stream_test COMMAND frame_stream_test)
+set_tests_properties(frame_stream_test PROPERTIES LABELS native-unit)
+
 add_test(
   NAME dependency_digest_test
   COMMAND

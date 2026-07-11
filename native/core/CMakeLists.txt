@@ -36,6 +36,7 @@ add_library(local_acr_core STATIC)
 target_sources(
   local_acr_core
   PRIVATE
+    src/audio/frame_stream.cpp
     src/audio/pcm_ingress.cpp
     src/audio/speex_resampler.cpp
     src/support/version.cpp
