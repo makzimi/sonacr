@@ -15,6 +15,32 @@
         "simd=off",
         "tools=off",
         "tests=off"
+      ],
+      "vendoredFiles": [
+        {
+          "path": "third_party/kissfft/kiss_fft.c",
+          "sha256": "3e8af99313c7e94f952ac12db46d3d5c5dd4a9bf93e0c32d43efa5fe39724051"
+        },
+        {
+          "path": "third_party/kissfft/kiss_fft.h",
+          "sha256": "9d6c7ddf520932c0aad669c86c064a24e571e594681be9f1491c14c9c9c75693"
+        },
+        {
+          "path": "third_party/kissfft/kiss_fftr.c",
+          "sha256": "128b651120725e8d55f6b9edf5d44b06dc022b260894eac078c6ff8aa7159561"
+        },
+        {
+          "path": "third_party/kissfft/kiss_fftr.h",
+          "sha256": "a0f72c1bddc3126d7a51ad80e965b58f6af77e4419aa882a0b11951e783632a8"
+        },
+        {
+          "path": "third_party/kissfft/_kiss_fft_guts.h",
+          "sha256": "dd1731891d0fff0e297198847de39216c5c8b9677ea4fe53160d1f6c74218d40"
+        },
+        {
+          "path": "third_party/kissfft/kiss_fft_log.h",
+          "sha256": "f954cb6890ec999f7fbc80cdd1c8c0194bbaeb0f1c27e11bd23450f53871cf8c"
+        }
       ]
     },
     {

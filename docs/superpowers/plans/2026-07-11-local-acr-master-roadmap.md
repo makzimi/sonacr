@@ -28,7 +28,7 @@ For every checkpoint:
 | 2 | PCM ingress | Validated S16/F32 layouts, deterministic channel downmixing, and source-frame continuity. | 1 | `feat: add deterministic PCM ingress` | committed |
 | 3a | Canonical resampling | SpeexDSP resampling, delay compensation, exact finite output, Q1.23 quantization, and chunk invariance. | 2 | `feat: canonicalize audio with SpeexDSP` | committed |
 | 3b | Analysis frames | Checked Hann coefficients, 512/128 streaming frames, source mapping, and finite partial-frame discard. | 3a | `feat: produce canonical analysis frames` | committed |
-| 4 | Spectral decisions | Scalar KISS FFT power, deterministic logarithmic weighting, and Q16.16 temporal filtering. | 3b | `feat: add deterministic spectral analysis` | planned |
+| 4 | Spectral decisions | Scalar KISS FFT power, deterministic logarithmic weighting, and Q16.16 temporal filtering. | 3b | `feat: add deterministic spectral analysis` | committed |
 | 5 | Peak confirmation | Adaptive masks, bounded provisional peaks, 22-hop confirmation, and finite/live EOF equivalence. | 4 | `feat: confirm adaptive spectral peaks` | planned |
 | 6 | Landmark fingerprints | Stable peak pairing, 24-bit hashes, deterministic ordering, deduplication, and bounded state. | 5 | `feat: generate landmark fingerprints` | planned |
 | 7 | Database core | Prefixed SQLite schema, canonical metadata/digest, integrity checks, resource bounds, and read-only ownership. | 6 | `feat: persist validated fingerprint databases` | planned |
@@ -71,7 +71,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 2 | `feat: add deterministic PCM ingress` | Focused PCM suite passed; Debug, ASan/UBSan, and TSan: 4/4 tests each; iOS simulator static library built. |
 | 3a | `feat: canonicalize audio with SpeexDSP` | Four source rates, exact finite counts, Q1.23 ties/saturation, 24 partition trials, pinned 48 kHz golden vector, and prefixed vendored symbols verified. |
 | 3b | `feat: produce canonical analysis frames` | High-precision Hann generator reproduced byte-for-byte; exact 512/128 origins, 32 ring-wrap partition trials, reset, and partial-tail discard verified. |
-| 4–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 4 | `feat: add deterministic spectral analysis` | KISS FFT archive digest verified; log/weight tables reproduced byte-for-byte; focused spectral vectors, Debug, ASan/UBSan, and TSan suites passed; strict FP flags inspected. |
+| 5–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 

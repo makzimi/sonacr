@@ -281,27 +281,27 @@ Commit: `feat: produce canonical analysis frames`
 - Consumes: `AnalysisFrame`.
 - Produces: `DecisionSpectrum { uint64_t time_frame; std::array<int32_t, 255> q16; }` for bins 1–255.
 
-- [ ] **Step 1: Add failing FFT, log, and filter vectors**
+- [x] **Step 1: Add failing FFT, log, and filter vectors**
 
 Cover impulse/sine/zero frames, excluded DC/Nyquist, binary32 power floor, exponent/mantissa log decomposition, table boundaries, saturating Q16.16 arithmetic, initial zero filtered frame, HPF pole `64225`, and near-threshold values.
 
-- [ ] **Step 2: Run the focused red tests**
+- [x] **Step 2: Run the focused red tests**
 
 Run the three new test targets and confirm missing-type compile failures.
 
-- [ ] **Step 3: Implement scalar spectral power and deterministic log weighting**
+- [x] **Step 3: Implement scalar spectral power and deterministic log weighting**
 
 Use KISS real FFT with single-precision input and scalar code paths only. Form power in `double`, round once to binary32, clamp to the checked binary32 representation of `1e-12`, index the 65,536-entry Q16.16 mantissa table by the upper fractional bits, then add checked `LN2_Q16` and `LN_WEIGHT_Q16[f]` values with saturation.
 
-- [ ] **Step 4: Implement the temporal recurrence**
+- [x] **Step 4: Implement the temporal recurrence**
 
 Implement `y[t,f] = x[t,f] - x[t-1,f] + mul_q16(64225, y[t-1,f])`, using ties-away multiplication and saturating additions. Initialize `x[-1,f]` from frame zero and `y[-1,f]` to zero.
 
-- [ ] **Step 5: Verify strict-FP compilation and vectors**
+- [x] **Step 5: Verify strict-FP compilation and vectors**
 
 Run the focused tests, inspect `compile_commands.json` for `-ffp-contract=off` and absence of fast-math, then run the full native unit suite.
 
-- [ ] **Step 6: Commit checkpoint 4**
+- [x] **Step 6: Commit checkpoint 4**
 
 Commit: `feat: add deterministic spectral analysis`
 

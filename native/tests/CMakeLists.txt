@@ -43,6 +43,39 @@ lacr_apply_strict_fp(frame_stream_test)
 add_test(NAME frame_stream_test COMMAND frame_stream_test)
 set_tests_properties(frame_stream_test PROPERTIES LABELS native-unit)
 
+add_executable(log_q16_test unit/log_q16_test.cpp)
+target_link_libraries(log_q16_test PRIVATE local_acr_core)
+target_include_directories(log_q16_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(log_q16_test PRIVATE cxx_std_20)
+lacr_apply_warnings(log_q16_test)
+lacr_apply_sanitizers(log_q16_test)
+lacr_apply_strict_fp(log_q16_test)
+
+add_test(NAME log_q16_test COMMAND log_q16_test)
+set_tests_properties(log_q16_test PROPERTIES LABELS native-unit)
+
+add_executable(temporal_filter_test unit/temporal_filter_test.cpp)
+target_link_libraries(temporal_filter_test PRIVATE local_acr_core)
+target_include_directories(temporal_filter_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(temporal_filter_test PRIVATE cxx_std_20)
+lacr_apply_warnings(temporal_filter_test)
+lacr_apply_sanitizers(temporal_filter_test)
+lacr_apply_strict_fp(temporal_filter_test)
+
+add_test(NAME temporal_filter_test COMMAND temporal_filter_test)
+set_tests_properties(temporal_filter_test PROPERTIES LABELS native-unit)
+
+add_executable(spectrum_test unit/spectrum_test.cpp)
+target_link_libraries(spectrum_test PRIVATE local_acr_core)
+target_include_directories(spectrum_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(spectrum_test PRIVATE cxx_std_20)
+lacr_apply_warnings(spectrum_test)
+lacr_apply_sanitizers(spectrum_test)
+lacr_apply_strict_fp(spectrum_test)
+
+add_test(NAME spectrum_test COMMAND spectrum_test)
+set_tests_properties(spectrum_test PROPERTIES LABELS native-unit)
+
 add_test(
   NAME dependency_digest_test
   COMMAND
