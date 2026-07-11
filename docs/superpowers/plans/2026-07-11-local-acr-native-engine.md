@@ -153,34 +153,34 @@ Commit: `build: bootstrap portable native core`
 - Create: `native/tests/unit/pcm_ingress_test.cpp`
 
 **Interfaces:**
-- Consumes: no platform ABI; checked spans from the test/source adapter.
-- Produces: `PcmIngress::push(const PcmView&, MonoSink&) -> Status`, with absolute `first_source_frame`, `frames`, `channels`, `sample_rate`, `SampleFormat`, and plane spans.
+- Consumes: no platform ABI; checked spans from the test/source adapter. `PcmIngress` receives a caller-owned mono scratch span at construction whose lifetime covers the ingress object; platform PCM pointers are retained only for the duration of `push`.
+- Produces: `PcmIngress::push(const PcmView&, MonoSink&) -> Status`, with absolute `first_source_frame`, `frames`, `channels`, `sample_rate`, `SampleFormat`, and plane spans. The sink receives one validated mono batch and is never called for a rejected input.
 
-- [ ] **Step 1: Add failing PCM shape and downmix tests**
+- [x] **Step 1: Add failing PCM shape and downmix tests**
 
 Cover S16 interleaved mono/stereo, F32 interleaved, F32 planar, channel-order deterministic averaging, clamp behavior, nonfinite rejection, invalid plane counts, zero frames, unsupported rates/channels, and a nonconsecutive `first_source_frame`.
 
-- [ ] **Step 2: Run the focused red test**
+- [x] **Step 2: Run the focused red test**
 
 Run: `cmake --build --preset macos-clang-debug --target pcm_ingress_test`
 
 Expected: compile failure because `PcmView` and `PcmIngress` are undefined.
 
-- [ ] **Step 3: Implement checked PCM iteration**
+- [x] **Step 3: Implement checked PCM iteration**
 
 Define `SampleFormat` with exactly `S16Interleaved`, `F32Interleaved`, and `F32Planar`. Validate all counts and byte extents before reading. Sum channels in increasing index order in `double`, multiply once by `1.0 / channels`, convert once to Float32, clamp to `[-1, 1]`, and emit no output when validation fails.
 
-- [ ] **Step 4: Implement timeline continuity**
+- [x] **Step 4: Implement timeline continuity**
 
 The first accepted batch establishes rate, channels, format, and expected next source frame. Later shape changes return `AudioDiscontinuity`; a frame-index gap returns `AudioDiscontinuity`; exact adjacency updates the expected index with checked arithmetic. `reset()` clears the negotiated shape and timeline.
 
-- [ ] **Step 5: Run focused and property tests**
+- [x] **Step 5: Run focused and property tests**
 
 Run: `ctest --preset macos-clang-debug -R pcm_ingress --output-on-failure`
 
 Expected: all PCM examples and deterministic randomized chunk partitions pass.
 
-- [ ] **Step 6: Verify and commit checkpoint 2**
+- [x] **Step 6: Verify and commit checkpoint 2**
 
 Run the full `native-unit` label, then `git diff --check`.
 

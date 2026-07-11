@@ -10,6 +10,17 @@ lacr_apply_strict_fp(version_test)
 add_test(NAME version_test COMMAND version_test)
 set_tests_properties(version_test PROPERTIES LABELS native-unit)
 
+add_executable(pcm_ingress_test unit/pcm_ingress_test.cpp)
+target_link_libraries(pcm_ingress_test PRIVATE local_acr_core)
+target_include_directories(pcm_ingress_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(pcm_ingress_test PRIVATE cxx_std_20)
+lacr_apply_warnings(pcm_ingress_test)
+lacr_apply_sanitizers(pcm_ingress_test)
+lacr_apply_strict_fp(pcm_ingress_test)
+
+add_test(NAME pcm_ingress_test COMMAND pcm_ingress_test)
+set_tests_properties(pcm_ingress_test PROPERTIES LABELS native-unit)
+
 add_test(
   NAME dependency_digest_test
   COMMAND
