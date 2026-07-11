@@ -1,0 +1,74 @@
+# Local ACR MVP Commit Roadmap
+
+**Design:** `docs/superpowers/specs/2026-07-11-local-acr-mvp-design.md`
+
+**Execution model:** Solo development on the current working branch. Each checkpoint is implemented with TDD, verified, self-reviewed, and committed before the next checkpoint begins. Pull requests, feature toggles, and branch-by-abstraction are not required for the greenfield MVP.
+
+**Rollback model:** Every checkpoint must leave the repository buildable and its scoped tests green. A defect can therefore be investigated with `git bisect`, or a checkpoint can be reverted without depending on uncommitted work from later checkpoints.
+
+## Checkpoint protocol
+
+For every checkpoint:
+
+1. Expand the checkpoint into an executable task plan before changing production code.
+2. Add the smallest failing test for one behavior.
+3. Run the focused test and record the expected failure.
+4. Implement the minimum production behavior.
+5. Run the focused test, then the checkpoint suite.
+6. Refactor only while the suite remains green.
+7. Run `git diff --check`, inspect the complete diff, and verify no unrelated files are included.
+8. Commit with the exact message in the table.
+9. Record the commit hash and verification evidence in this roadmap.
+
+## Checkpoints
+
+| # | Checkpoint | Deliverable | Depends on | Commit message | Status |
+|---|---|---|---|---|---|
+| 1 | Portable native build | Reproducible C++20/CMake host and mobile-library build with CTest, warnings, strict FP, sanitizers, and dependency provenance. | — | `build: bootstrap portable native core` | planned |
+| 2 | PCM ingress | Validated S16/F32 layouts, deterministic channel downmixing, and source-frame continuity. | 1 | `feat: add deterministic PCM ingress` | planned |
+| 3 | Canonical frames | SpeexDSP resampling, delay compensation, Q1.23 quantization, Hann framing, and chunk invariance. | 2 | `feat: produce canonical analysis frames` | planned |
+| 4 | Spectral decisions | Scalar KISS FFT power, deterministic logarithmic weighting, and Q16.16 temporal filtering. | 3 | `feat: add deterministic spectral analysis` | planned |
+| 5 | Peak confirmation | Adaptive masks, bounded provisional peaks, 22-hop confirmation, and finite/live EOF equivalence. | 4 | `feat: confirm adaptive spectral peaks` | planned |
+| 6 | Landmark fingerprints | Stable peak pairing, 24-bit hashes, deterministic ordering, deduplication, and bounded state. | 5 | `feat: generate landmark fingerprints` | planned |
+| 7 | Database core | Prefixed SQLite schema, canonical metadata/digest, integrity checks, resource bounds, and read-only ownership. | 6 | `feat: persist validated fingerprint databases` | planned |
+| 8 | Candidate alignment | Bounded indexed lookup, unique query voting, floor-quantized offsets, and disjoint secondary aggregates. | 7 | `feat: align fingerprint candidates` | planned |
+| 9 | Recognition gates | Conservative evidence/separation/stability gates, confidence, ambiguity rejection, and matched position. | 8 | `feat: apply conservative recognition gates` | planned |
+| 10 | Streaming engine | Four-second rolling recognition, evaluation schedule, reset, typed events, and injected-PCM tests. | 9 | `feat: run bounded recognition sessions` | planned |
+| 11 | Native C ABI | Opaque handles, SPSC queue, push/poll API, session generations, exception containment, and quiescent destruction. | 10 | `feat: expose safe native recognition ABI` | planned |
+| 12 | CLI input pipeline | Strict manifest parser and bounded no-shell FFprobe/FFmpeg streaming decoder. | 6 | `feat: decode validated CLI audio inputs` | planned |
+| 13 | Database commands | Durable build, inspect, verify, and frozen-toolchain `verify --release` commands. | 7, 12 | `feat: build and verify local ACR databases` | planned |
+| 14 | Library ambiguity gate | Exact runtime matcher over every required sliding cross-trigger window during builds. | 9, 13 | `feat: reject ambiguous cue libraries` | planned |
+| 15 | KMP lifecycle API | Public types, typed errors, factory, prepare/start/stop/close, main-thread delivery, cooldown, and race tests. | 11 | `feat: add shared Local ACR lifecycle API` | planned |
+| 16 | Android capture | JNI direct-buffer binding and bounded `AudioRecord` capture with permission, discontinuity, and shutdown handling. | 15 | `feat: add Android microphone capture` | planned |
+| 17 | Android demo | API 26 Compose permission/listening/promotion flow using a bundled generated database. | 13, 14, 16 | `feat: add Android Local ACR demo` | planned |
+| 18 | iOS capture | Objective-C++ `AVAudioEngine` bridge and Kotlin/Native integration without Kotlin on the audio tap. | 15 | `feat: add iOS microphone capture bridge` | planned |
+| 19 | iOS demo | iOS 15 SwiftUI permission/listening/promotion flow using the same database. | 13, 14, 18 | `feat: add iOS Local ACR demo` | planned |
+| 20 | Parity and native safety | Cross-target goldens, Swift ABI gate, malformed-input properties, fuzzing, sanitizers, and nominal soak. | 11, 16, 18 | `test: enforce native parity and safety` | planned |
+| 21 | Quality qualification | Preregistered corpus runners, statistical gates, latency/startup/memory benchmarks, and device evidence. | 17, 19, 20 | `test: qualify Local ACR recognition profile` | planned |
+| 22 | Release packaging | Android/iOS SDK artifacts, original cue fixtures/database, notices, SBOM, provenance, and release manifest. | 21 | `build: package Local ACR MVP artifacts` | planned |
+
+Status values: `planned · in-progress · committed · blocked`
+
+## Detailed plan set
+
+The roadmap is intentionally navigational. Exact files, interfaces, failing tests, commands, expected output, and implementation snippets are expanded one subsystem ahead of production work:
+
+| Subsystem | Checkpoints | Plan path | State |
+|---|---:|---|---|
+| Native engine | 1–11 | `docs/superpowers/plans/2026-07-11-local-acr-native-engine.md` | ready for execution |
+| CLI and database builder | 12–14 | `docs/superpowers/plans/2026-07-11-local-acr-cli-database.md` | create and review before checkpoint 12 |
+| KMP and mobile applications | 15–19 | `docs/superpowers/plans/2026-07-11-local-acr-kmp-mobile.md` | create and review before checkpoint 15 |
+| Qualification and release | 20–22 | `docs/superpowers/plans/2026-07-11-local-acr-qualification-release.md` | create and review before checkpoint 20 |
+
+This just-in-time expansion keeps later implementation details aligned with the interfaces and measurements established by earlier committed checkpoints without weakening any commit boundary.
+
+## Checkpoint evidence
+
+| # | Commit | Verification evidence |
+|---|---|---|
+| 1–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+
+## Decisions
+
+- 2026-07-11: The approved design was initially decomposed as review-sized trunk-development slices.
+- 2026-07-11: Replaced PR-oriented execution with solo checkpoint commits at the user's request. Isolation, TDD, verification, and rollback boundaries remain; PR mechanics and approval gates were removed.
