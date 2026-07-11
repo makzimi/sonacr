@@ -21,6 +21,17 @@ lacr_apply_strict_fp(pcm_ingress_test)
 add_test(NAME pcm_ingress_test COMMAND pcm_ingress_test)
 set_tests_properties(pcm_ingress_test PROPERTIES LABELS native-unit)
 
+add_executable(resampler_test unit/resampler_test.cpp)
+target_link_libraries(resampler_test PRIVATE local_acr_core)
+target_include_directories(resampler_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(resampler_test PRIVATE cxx_std_20)
+lacr_apply_warnings(resampler_test)
+lacr_apply_sanitizers(resampler_test)
+lacr_apply_strict_fp(resampler_test)
+
+add_test(NAME resampler_test COMMAND resampler_test)
+set_tests_properties(resampler_test PROPERTIES LABELS native-unit)
+
 add_test(
   NAME dependency_digest_test
   COMMAND

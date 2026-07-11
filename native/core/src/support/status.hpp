@@ -10,6 +10,8 @@ enum class StatusCode : std::uint8_t {
   InvalidArgument,
   ResourceLimitExceeded,
   AudioDiscontinuity,
+  InvalidState,
+  NativeEngineFailure,
 };
 
 class Status final {
@@ -28,6 +30,14 @@ class Status final {
 
   [[nodiscard]] static constexpr Status audio_discontinuity() noexcept {
     return Status(StatusCode::AudioDiscontinuity);
+  }
+
+  [[nodiscard]] static constexpr Status invalid_state() noexcept {
+    return Status(StatusCode::InvalidState);
+  }
+
+  [[nodiscard]] static constexpr Status native_engine_failure() noexcept {
+    return Status(StatusCode::NativeEngineFailure);
   }
 
   [[nodiscard]] constexpr bool ok() const noexcept {

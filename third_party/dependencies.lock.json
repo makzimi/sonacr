@@ -29,6 +29,20 @@
         "resampler-only",
         "quality=5",
         "tests=off"
+      ],
+      "vendoredFiles": [
+        {
+          "path": "third_party/speexdsp/include/speex_resampler.h",
+          "sha256": "7e439ec0dd30c32216b3ced17135f8992e5aaf53389d3f5996a7d900c453e65f"
+        },
+        {
+          "path": "third_party/speexdsp/src/arch.h",
+          "sha256": "102f6a14a95f8ae0bcfc69270f3a9e3fbba08b63bba688ca524f71e3faa48c23"
+        },
+        {
+          "path": "third_party/speexdsp/src/resample.c",
+          "sha256": "c28fabfc082d0e7634eb678e2e3a2bc091148bbb8324e3d06669c9a9faf6793a"
+        }
       ]
     },
     {

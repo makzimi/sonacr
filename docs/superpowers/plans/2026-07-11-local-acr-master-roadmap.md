@@ -26,8 +26,9 @@ For every checkpoint:
 |---|---|---|---|---|---|
 | 1 | Portable native build | Reproducible C++20/CMake host and mobile-library build with CTest, warnings, strict FP, sanitizers, and dependency provenance. | — | `build: bootstrap portable native core` | committed |
 | 2 | PCM ingress | Validated S16/F32 layouts, deterministic channel downmixing, and source-frame continuity. | 1 | `feat: add deterministic PCM ingress` | committed |
-| 3 | Canonical frames | SpeexDSP resampling, delay compensation, Q1.23 quantization, Hann framing, and chunk invariance. | 2 | `feat: produce canonical analysis frames` | planned |
-| 4 | Spectral decisions | Scalar KISS FFT power, deterministic logarithmic weighting, and Q16.16 temporal filtering. | 3 | `feat: add deterministic spectral analysis` | planned |
+| 3a | Canonical resampling | SpeexDSP resampling, delay compensation, exact finite output, Q1.23 quantization, and chunk invariance. | 2 | `feat: canonicalize audio with SpeexDSP` | committed |
+| 3b | Analysis frames | Checked Hann coefficients, 512/128 streaming frames, source mapping, and finite partial-frame discard. | 3a | `feat: produce canonical analysis frames` | planned |
+| 4 | Spectral decisions | Scalar KISS FFT power, deterministic logarithmic weighting, and Q16.16 temporal filtering. | 3b | `feat: add deterministic spectral analysis` | planned |
 | 5 | Peak confirmation | Adaptive masks, bounded provisional peaks, 22-hop confirmation, and finite/live EOF equivalence. | 4 | `feat: confirm adaptive spectral peaks` | planned |
 | 6 | Landmark fingerprints | Stable peak pairing, 24-bit hashes, deterministic ordering, deduplication, and bounded state. | 5 | `feat: generate landmark fingerprints` | planned |
 | 7 | Database core | Prefixed SQLite schema, canonical metadata/digest, integrity checks, resource bounds, and read-only ownership. | 6 | `feat: persist validated fingerprint databases` | planned |
@@ -68,7 +69,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 |---|---|---|
 | 1 | `build: bootstrap portable native core` | Debug, ASan/UBSan, and TSan: 3/3 tests each; iOS simulator static library built; Android API 26 and Linux presets parsed. |
 | 2 | `feat: add deterministic PCM ingress` | Focused PCM suite passed; Debug, ASan/UBSan, and TSan: 4/4 tests each; iOS simulator static library built. |
-| 3–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 3a | `feat: canonicalize audio with SpeexDSP` | Four source rates, exact finite counts, Q1.23 ties/saturation, 24 partition trials, pinned 48 kHz golden vector, and prefixed vendored symbols verified. |
+| 3b–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 
