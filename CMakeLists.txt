@@ -29,6 +29,7 @@ endif()
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS" AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android")
   add_subdirectory(native/cli)
+  add_subdirectory(tools/qualification)
 endif()
 
 if(LACR_BUILD_TESTS)

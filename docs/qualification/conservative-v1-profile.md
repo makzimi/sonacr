@@ -40,10 +40,10 @@ These fields are intentionally pending until the preregistered corpus runner exi
 
 | Evidence | Status |
 |---|---|
-| Corpus manifest digest | Pending checkpoint 21 |
-| Decoder/toolchain version | Pending checkpoint 21 |
-| Positive injected holdout trials | Pending checkpoint 21 |
-| Negative injected holdout duration | Pending checkpoint 21 |
-| Median / p95 injected latency | Pending checkpoint 21 |
-| Matched-position error distribution | Pending checkpoint 21 |
-| Device matrix and real acoustic evidence | Pending checkpoint 21 |
+| Corpus manifest digest | `5e4725fe8f9834a12c2915b78d349afc6fcee7e3d66fd73a4d5519a32b1edb25` |
+| Decoder/toolchain version | Development fixture runner; no external decoder used |
+| Positive injected holdout trials | 1 checked-in fixture trial |
+| Negative injected holdout duration | Fixture-level negative trial only; full 300-hour gate pending release corpus |
+| Median / p95 injected latency | 2500 ms / 3200 ms in deterministic fixture runner |
+| Matched-position error distribution | Maximum 120 ms in deterministic fixture runner |
+| Device matrix and real acoustic evidence | Schema defined in `docs/qualification/device-matrix.md`; physical evidence pending manual run |

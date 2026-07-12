@@ -227,14 +227,14 @@ git commit --author="Maxim Kachinkin <m.kachinkin@dodobrands.io>" -m "test: enfo
 - Consumes: checked-in demo database/audio fixtures and native C ABI injected-PCM recognition.
 - Produces: deterministic injected-corpus runner and versioned acceptance report schema.
 
-- [ ] Add failing tests for corpus manifest parsing: seeds, trigger IDs, positive/negative trial definitions, SNR/RT60/gain/offset fields, and holdout/calibration split validation.
-- [ ] Implement the manifest parser and runner dry-run mode that prints exact planned trial counts without needing real-device audio.
-- [ ] Add injected positive/negative fixture trials for the demo database and require deterministic JSONL result output.
-- [ ] Add latency/matched-position aggregation and threshold checks for the small checked-in fixture set.
-- [ ] Create `docs/qualification/device-matrix.md` with required Android/iPhone devices, room/distance/ambient fields, and evidence slots marked pending manual execution.
-- [ ] Update `docs/qualification/conservative-v1-profile.md` with the corpus manifest digest and checked-in fixture-run metrics.
-- [ ] Run native suites, Gradle regressions, iOS XCTest, and qualification runner tests.
-- [ ] Commit: `test: qualify Local ACR recognition profile`
+- [x] Add failing tests for corpus manifest parsing: seeds, trigger IDs, positive/negative trial definitions, SNR/RT60/gain/offset fields, and holdout/calibration split validation.
+- [x] Implement the manifest parser and runner dry-run mode that prints exact planned trial counts without needing real-device audio.
+- [x] Add injected positive/negative fixture trials for the demo database and require deterministic JSONL result output.
+- [x] Add latency/matched-position aggregation and threshold checks for the small checked-in fixture set.
+- [x] Create `docs/qualification/device-matrix.md` with required Android/iPhone devices, room/distance/ambient fields, and evidence slots marked pending manual execution.
+- [x] Update `docs/qualification/conservative-v1-profile.md` with the corpus manifest digest and checked-in fixture-run metrics.
+- [x] Run native suites, Gradle regressions, iOS XCTest, and qualification runner tests.
+- [x] Commit: `test: qualify Local ACR recognition profile`
 
 ## Checkpoint 22: Release packaging
 
