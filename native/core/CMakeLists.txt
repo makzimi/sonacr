@@ -60,6 +60,7 @@ target_sources(
     src/audio/frame_stream.cpp
     src/audio/pcm_ingress.cpp
     src/fingerprint/log_q16_table.cpp
+    src/fingerprint/peak_selector.cpp
     src/fingerprint/spectrum.cpp
     src/audio/speex_resampler.cpp
     src/support/version.cpp

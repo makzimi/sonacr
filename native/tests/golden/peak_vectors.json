@@ -1,0 +1,8 @@
+{
+  "profile": "landmark-v1",
+  "warmupFrames": 10,
+  "confirmationDelayFrames": 22,
+  "maxCandidatesPerFrame": 5,
+  "thresholdDecayQ16": -197,
+  "notes": "Unit tests construct deterministic in-code vectors for warm-up, plateau, ordering, suppression, bounded storage, and finite EOF behavior."
+}

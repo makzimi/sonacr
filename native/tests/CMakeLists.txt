@@ -76,6 +76,17 @@ lacr_apply_strict_fp(spectrum_test)
 add_test(NAME spectrum_test COMMAND spectrum_test)
 set_tests_properties(spectrum_test PROPERTIES LABELS native-unit)
 
+add_executable(peak_selector_test unit/peak_selector_test.cpp)
+target_link_libraries(peak_selector_test PRIVATE local_acr_core)
+target_include_directories(peak_selector_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(peak_selector_test PRIVATE cxx_std_20)
+lacr_apply_warnings(peak_selector_test)
+lacr_apply_sanitizers(peak_selector_test)
+lacr_apply_strict_fp(peak_selector_test)
+
+add_test(NAME peak_selector_test COMMAND peak_selector_test)
+set_tests_properties(peak_selector_test PROPERTIES LABELS native-unit)
+
 add_test(
   NAME dependency_digest_test
   COMMAND

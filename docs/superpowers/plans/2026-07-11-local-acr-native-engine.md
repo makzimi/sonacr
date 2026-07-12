@@ -318,27 +318,27 @@ Commit: `feat: add deterministic spectral analysis`
 - Consumes: ordered `DecisionSpectrum` frames.
 - Produces: ordered `ConfirmedPeak { uint32_t time_frame; uint8_t bin; int32_t value_q16; }`.
 
-- [ ] **Step 1: Add failing warm-up, masking, tie, and EOF tests**
+- [x] **Step 1: Add failing warm-up, masking, tie, and EOF tests**
 
 Cover ten-frame warm-up, checked Gaussian penalties, decay `round_q16(ln(0.997))`, local plateau choosing the lowest bin, descending-value/ascending-bin top-five ordering, newer-wins suppression, exact 22-hop confirmation, bounded provisional storage, and EOF tails from zero through 21 hops.
 
-- [ ] **Step 2: Run the focused red test**
+- [x] **Step 2: Run the focused red test**
 
 Run the new peak-selector target and confirm missing-type compile failure.
 
-- [ ] **Step 3: Implement fixed-point thresholding and provisional peaks**
+- [x] **Step 3: Implement fixed-point thresholding and provisional peaks**
 
 Use only Q16.16 values for threshold, sort, suppression, and confirmation decisions. Update thresholds in candidate order and never roll updates back. At age exactly 22, emit unsuppressed peaks and erase all entries of that age.
 
-- [ ] **Step 4: Implement finite/live equivalence**
+- [x] **Step 4: Implement finite/live equivalence**
 
 `finishFinite()` discards every provisional peak younger than 22 frames. Compare a finite builder run with a live run stopped at the same canonical boundary for every varied-tail fixture and require byte-identical confirmed peaks.
 
-- [ ] **Step 5: Run focused, property, full, and ASan suites**
+- [x] **Step 5: Run focused, property, full, and ASan suites**
 
 Expected: all order, chunk, tail, and bound properties pass with no growth across a long synthetic stream.
 
-- [ ] **Step 6: Commit checkpoint 5**
+- [x] **Step 6: Commit checkpoint 5**
 
 Commit: `feat: confirm adaptive spectral peaks`
 
