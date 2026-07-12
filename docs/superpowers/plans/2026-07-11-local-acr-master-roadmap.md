@@ -46,7 +46,7 @@ For every checkpoint:
 | 19 | iOS demo | iOS 15 SwiftUI permission/listening/promotion flow using the same database. | 13, 14, 18 | `feat: add iOS Local ACR demo` | committed |
 | 20 | Parity and native safety | Cross-target goldens, Swift ABI gate, malformed-input properties, fuzzing, sanitizers, and nominal soak. | 11, 16, 18 | `test: enforce native parity and safety` | committed |
 | 21 | Quality qualification | Preregistered corpus runners, statistical gates, latency/startup/memory benchmarks, and device evidence. | 17, 19, 20 | `test: qualify Local ACR recognition profile` | committed |
-| 22 | Release packaging | Android/iOS SDK artifacts, original cue fixtures/database, notices, SBOM, provenance, and release manifest. | 21 | `build: package Local ACR MVP artifacts` | planned |
+| 22 | Release packaging | Android/iOS SDK artifacts, original cue fixtures/database, notices, SBOM, provenance, and release manifest. | 21 | `build: package Local ACR MVP artifacts` | committed |
 
 Status values: `planned · in-progress · committed · blocked`
 
@@ -59,7 +59,7 @@ The roadmap is intentionally navigational. Exact files, interfaces, failing test
 | Native engine | 1–11 | `docs/superpowers/plans/2026-07-11-local-acr-native-engine.md` | ready for execution |
 | CLI and database builder | 12–14 | `docs/superpowers/plans/2026-07-11-local-acr-cli-database.md` | ready for execution |
 | KMP and mobile applications | 15–19 | `docs/superpowers/plans/2026-07-11-local-acr-kmp-mobile.md` | completed |
-| Qualification and release | 20–22 | `docs/superpowers/plans/2026-07-11-local-acr-qualification-release.md` | ready for execution |
+| Qualification and release | 20–22 | `docs/superpowers/plans/2026-07-11-local-acr-qualification-release.md` | completed |
 
 This just-in-time expansion keeps later implementation details aligned with the interfaces and measurements established by earlier committed checkpoints without weakening any commit boundary.
 
@@ -89,7 +89,7 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 19 | `feat: add iOS Local ACR demo` | iOS SwiftUI app/test target built and XCTest ran on iPhone 16 simulator; permission/listening/promotion/cooldown/local-CTA controller tests covered; bundled `venue-demo.lacrdb` inspected as 1 trigger / 74 fingerprints; KMP iOS framework link, shared/Android regressions, native Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator `local_acr_ios_bridge`/`local_acr_core` build passed. |
 | 20 | `test: enforce native parity and safety` | Added serialized `landmark-v1` parity golden, native parity CTest, malformed C ABI/input property CTest, nominal injected queue/recognizer soak CTest, and Swift `LACRRecognizer` façade contract XCTest; Debug 29/29, ASan/UBSan 29/29, TSan 29/29, iOS simulator native bridge/core build, Gradle shared/Android regression, and iOS XCTest 7/7 passed. |
 | 21 | `test: qualify Local ACR recognition profile` | Added preregistered fixture corpus manifest, deterministic qualification runner, dry-run and JSONL fixture metrics, device-matrix evidence schema, and profile metrics/digest; fixture dry-run reported 3 total / 2 positive / 1 negative / 1 calibration / 2 holdout trials; fixture run reported 2/2 positives recognized, 0 false callbacks, median/p95 latency 2500/3200 ms, max matched-position error 120 ms; Debug 30/30, ASan/UBSan 30/30, TSan 30/30, iOS simulator native bridge/core build, Gradle shared/Android regression, and iOS XCTest 7/7 passed. |
-| 22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 22 | `build: package Local ACR MVP artifacts` | Added release packager, packaging tests, NOTICE, SBOM, provenance, and release-manifest template; staged `build/release/local-acr-mvp/` with Android APK, shared AAR, iOS simulator framework zip, native `local_acr_db`, and `venue-demo.lacrdb`; verified 5 artifact SHA-256 digests and `examples/` exclusion proof; Debug 30/30, ASan/UBSan 30/30, TSan 30/30, iOS simulator native bridge/core build, Gradle shared/Android regression, packaging tests 3/3, and iOS XCTest 7/7 passed. |
 
 ## Decisions
 

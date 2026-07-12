@@ -251,13 +251,13 @@ git commit --author="Maxim Kachinkin <m.kachinkin@dodobrands.io>" -m "test: enfo
 - Consumes: checkpoint 21 qualified artifacts and existing build outputs.
 - Produces: reproducible release staging directory with Android APK/AAR, iOS framework/app references, native CLI, `.lacrdb`, notices, SBOM, provenance, and checksums.
 
-- [ ] Add failing packaging tests that require the release manifest to list every artifact, SHA-256 digest, source commit, build command, dependency notice, and exclusion proof for `examples/`.
-- [ ] Implement `tools/release/package_local_acr.py` using explicit paths and no shell interpolation.
-- [ ] Generate SBOM/provenance/NOTICE files from pinned dependency metadata and checked-in Local ACR files.
-- [ ] Build Android, iOS simulator framework/app test target, native CLI, and demo database.
-- [ ] Stage release artifacts under `build/release/local-acr-mvp/` and verify manifest digests.
-- [ ] Run all checkpoint verification plus packaging tests.
-- [ ] Commit: `build: package Local ACR MVP artifacts`
+- [x] Add failing packaging tests that require the release manifest to list every artifact, SHA-256 digest, source commit, build command, dependency notice, and exclusion proof for `examples/`.
+- [x] Implement `tools/release/package_local_acr.py` using explicit paths and no shell interpolation.
+- [x] Generate SBOM/provenance/NOTICE files from pinned dependency metadata and checked-in Local ACR files.
+- [x] Build Android, iOS simulator framework/app test target, native CLI, and demo database.
+- [x] Stage release artifacts under `build/release/local-acr-mvp/` and verify manifest digests.
+- [x] Run all checkpoint verification plus packaging tests.
+- [x] Commit: `build: package Local ACR MVP artifacts`
 
 ## Self-Review
 
