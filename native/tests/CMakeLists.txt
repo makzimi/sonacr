@@ -98,6 +98,17 @@ lacr_apply_strict_fp(landmark_builder_test)
 add_test(NAME landmark_builder_test COMMAND landmark_builder_test)
 set_tests_properties(landmark_builder_test PROPERTIES LABELS native-unit)
 
+add_executable(offset_accumulator_test unit/offset_accumulator_test.cpp)
+target_link_libraries(offset_accumulator_test PRIVATE local_acr_core)
+target_include_directories(offset_accumulator_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(offset_accumulator_test PRIVATE cxx_std_20)
+lacr_apply_warnings(offset_accumulator_test)
+lacr_apply_sanitizers(offset_accumulator_test)
+lacr_apply_strict_fp(offset_accumulator_test)
+
+add_test(NAME offset_accumulator_test COMMAND offset_accumulator_test)
+set_tests_properties(offset_accumulator_test PROPERTIES LABELS native-unit)
+
 add_executable(fingerprinter_test integration/fingerprinter_test.cpp)
 target_link_libraries(fingerprinter_test PRIVATE local_acr_core)
 target_include_directories(fingerprinter_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
@@ -119,6 +130,17 @@ lacr_apply_strict_fp(database_test)
 
 add_test(NAME database_test COMMAND database_test)
 set_tests_properties(database_test PROPERTIES LABELS native-integration)
+
+add_executable(candidate_lookup_test integration/candidate_lookup_test.cpp)
+target_link_libraries(candidate_lookup_test PRIVATE local_acr_core)
+target_include_directories(candidate_lookup_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(candidate_lookup_test PRIVATE cxx_std_20)
+lacr_apply_warnings(candidate_lookup_test)
+lacr_apply_sanitizers(candidate_lookup_test)
+lacr_apply_strict_fp(candidate_lookup_test)
+
+add_test(NAME candidate_lookup_test COMMAND candidate_lookup_test)
+set_tests_properties(candidate_lookup_test PROPERTIES LABELS native-integration)
 
 if(APPLE)
   find_library(LACR_SYSTEM_SQLITE_LIBRARY sqlite3)

@@ -32,7 +32,7 @@ For every checkpoint:
 | 5 | Peak confirmation | Adaptive masks, bounded provisional peaks, 22-hop confirmation, and finite/live EOF equivalence. | 4 | `feat: confirm adaptive spectral peaks` | committed |
 | 6 | Landmark fingerprints | Stable peak pairing, 24-bit hashes, deterministic ordering, deduplication, and bounded state. | 5 | `feat: generate landmark fingerprints` | committed |
 | 7 | Database core | Hidden vendored SQLite schema, canonical metadata/digest, integrity checks, resource bounds, and read-only ownership. | 6 | `feat: persist validated fingerprint databases` | committed |
-| 8 | Candidate alignment | Bounded indexed lookup, unique query voting, floor-quantized offsets, and disjoint secondary aggregates. | 7 | `feat: align fingerprint candidates` | planned |
+| 8 | Candidate alignment | Bounded indexed lookup, unique query voting, floor-quantized offsets, and disjoint secondary aggregates. | 7 | `feat: align fingerprint candidates` | committed |
 | 9 | Recognition gates | Conservative evidence/separation/stability gates, confidence, ambiguity rejection, and matched position. | 8 | `feat: apply conservative recognition gates` | planned |
 | 10 | Streaming engine | Four-second rolling recognition, evaluation schedule, reset, typed events, and injected-PCM tests. | 9 | `feat: run bounded recognition sessions` | planned |
 | 11 | Native C ABI | Opaque handles, SPSC queue, push/poll API, session generations, exception containment, and quiescent destruction. | 10 | `feat: expose safe native recognition ABI` | planned |
@@ -75,7 +75,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 5 | `feat: confirm adaptive spectral peaks` | Gaussian penalties reproduced byte-for-byte; warm-up, plateau ties, top-five ordering, newer suppression, 22-hop confirmation, finite EOF, bounded storage, Debug, ASan/UBSan, and TSan suites passed. |
 | 6 | `feat: generate landmark fingerprints` | Hash packing, delta/bin boundaries, duplicate identity retention, anchor expiry, PCM-to-landmark chunk invariance, Debug, ASan/UBSan, and TSan suites passed. |
 | 7 | `feat: persist validated fingerprint databases` | SQLite archive digest verified; compile options and Apple system-SQLite coexistence asserted; schema golden, semantic digest, profile/digest/FK corruption, posting bounds, read-only connection, Debug, ASan/UBSan, and TSan suites passed. |
-| 8–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 8 | `feat: align fingerprint candidates` | Repeated-hash vote deduplication, negative floor offsets, 256-hash SQL chunks, expansion cutoff, per-trigger isolation, disjoint secondary centers, Debug, ASan/UBSan, and TSan suites passed. |
+| 9–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 

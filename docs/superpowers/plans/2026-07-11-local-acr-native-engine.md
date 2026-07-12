@@ -443,27 +443,27 @@ Commit: `feat: persist validated fingerprint databases`
 - Consumes: up to 512 query landmark identities and a prepared `DatabaseReader`.
 - Produces: bounded `AlignedCandidate { trigger_id, center_bucket, aligned_query_ids, aligned_count, aligned_ratio }` records.
 
-- [ ] **Step 1: Add failing repeated-hash and negative-offset tests**
+- [x] **Step 1: Add failing repeated-hash and negative-offset tests**
 
 Cover one query identity appearing in three neighboring buckets, multiple query times with one hash, negative mathematical floor division, SQL chunks of 256, 128-posting stop limit, 65,536 expansion cutoff, per-trigger isolation, deterministic ties, and secondary centers separated by at least three.
 
-- [ ] **Step 2: Run focused red tests**
+- [x] **Step 2: Run focused red tests**
 
 Expected: missing candidate-lookup and accumulator types.
 
-- [ ] **Step 3: Implement streaming indexed lookup**
+- [x] **Step 3: Implement streaming indexed lookup**
 
 Group query identities by hash, issue parameterized read-only statements in at most 256-hash chunks, stream rows, expand against every query time sharing the hash, and stop without a result when the expansion bound is reached.
 
-- [ ] **Step 4: Implement unique-vote offset aggregation**
+- [x] **Step 4: Implement unique-vote offset aggregation**
 
 Use mathematical floor division by two hops. Score a center by the set union of query identities from center−1 through center+1. Pick by score, absolute offset, signed offset; find the best secondary only among disjoint three-bin ranges.
 
-- [ ] **Step 5: Run focused, full, memory-bound, and ASan tests**
+- [x] **Step 5: Run focused, full, memory-bound, and ASan tests**
 
 Expected: repeated postings cannot inflate aligned counts and memory remains bounded at maximum profile input.
 
-- [ ] **Step 6: Commit checkpoint 8**
+- [x] **Step 6: Commit checkpoint 8**
 
 Commit: `feat: align fingerprint candidates`
 

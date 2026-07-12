@@ -17,12 +17,15 @@ class DatabaseReader final {
 
   DatabaseReader(const DatabaseReader&) = delete;
   DatabaseReader& operator=(const DatabaseReader&) = delete;
+  DatabaseReader(DatabaseReader&& other) noexcept;
+  DatabaseReader& operator=(DatabaseReader&& other) noexcept;
 
   [[nodiscard]] Status open(const std::filesystem::path& path) noexcept;
   void close() noexcept;
 
   [[nodiscard]] const DatabaseIdentity& identity() const noexcept;
   [[nodiscard]] Status try_debug_write_for_test() noexcept;
+  [[nodiscard]] sqlite3* sqlite_handle_for_matcher() const noexcept;
 
  private:
   sqlite3* db_ = nullptr;

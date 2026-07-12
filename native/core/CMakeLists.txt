@@ -97,6 +97,8 @@ target_sources(
     src/fingerprint/landmark_builder.cpp
     src/fingerprint/peak_selector.cpp
     src/fingerprint/spectrum.cpp
+    src/matcher/candidate_lookup.cpp
+    src/matcher/offset_accumulator.cpp
     src/audio/speex_resampler.cpp
     src/support/sha256.cpp
     src/support/version.cpp

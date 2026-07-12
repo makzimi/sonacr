@@ -10,6 +10,7 @@
 #include <map>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 namespace local_acr {
@@ -231,6 +232,23 @@ DatabaseReader::~DatabaseReader() {
   close();
 }
 
+DatabaseReader::DatabaseReader(DatabaseReader&& other) noexcept
+    : db_(other.db_), identity_(std::move(other.identity_)) {
+  other.db_ = nullptr;
+  other.identity_ = {};
+}
+
+DatabaseReader& DatabaseReader::operator=(DatabaseReader&& other) noexcept {
+  if (this != &other) {
+    close();
+    db_ = other.db_;
+    identity_ = std::move(other.identity_);
+    other.db_ = nullptr;
+    other.identity_ = {};
+  }
+  return *this;
+}
+
 Status DatabaseReader::open(const std::filesystem::path& path) noexcept {
   close();
   std::error_code ec;
@@ -352,6 +370,10 @@ Status DatabaseReader::try_debug_write_for_test() noexcept {
   }
   const Status status = sqlite_exec(db_, "CREATE TABLE should_not_write(x INTEGER);");
   return status.ok() ? Status::native_engine_failure() : Status::invalid_state();
+}
+
+sqlite3* DatabaseReader::sqlite_handle_for_matcher() const noexcept {
+  return db_;
 }
 
 }  // namespace local_acr
