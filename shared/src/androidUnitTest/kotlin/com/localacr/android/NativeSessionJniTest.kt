@@ -8,10 +8,20 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class NativeSessionJniTest {
+    @Test
+    fun jniBridgeReportsFailureWhenNativeLibraryIsUnavailable() {
+        val result = JniNativeBridge.create("db.lacrdb", 48_000)
+
+        assertFalse(result.status == NativeBridgeStatus.Ok)
+        assertNull(result.value)
+    }
+
     @Test
     fun pushPcmRequiresDirectBufferAndPreservesOneBulkBuffer() {
         val bridge = RecordingNativeBridge()

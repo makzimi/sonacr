@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "local-acr"
 include(":shared")
+include(":androidApp")

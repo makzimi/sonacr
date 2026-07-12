@@ -148,11 +148,16 @@ internal sealed class NativeBridgeEvent {
 }
 
 internal object JniNativeBridge : NativeBridge {
+    private val loaded: Boolean
+
     init {
-        runCatching { System.loadLibrary("local_acr_jni") }
+        loaded = runCatching { System.loadLibrary("local_acr_jni") }.isSuccess
     }
 
     override fun create(databasePath: String, sampleRate: Int): NativeBridgeResult<Long> {
+        if (!loaded) {
+            return NativeBridgeResult.failure(NativeBridgeStatus.NativeEngineFailure)
+        }
         val handle = nativeCreate(databasePath, sampleRate)
         return if (handle == 0L) {
             NativeBridgeResult.failure(NativeBridgeStatus.NativeEngineFailure)

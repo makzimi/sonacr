@@ -127,16 +127,16 @@ Commit: `feat: add shared Local ACR lifecycle API`
 - Create: `androidApp/src/main/AndroidManifest.xml`
 - Create: `androidApp/src/main/kotlin/com/localacr/demo/MainActivity.kt`
 - Create: `androidApp/src/main/assets/venue-demo.lacrdb`
-- Create Compose UI tests.
+- Create: `androidApp/src/test/kotlin/com/localacr/demo/DemoControllerTest.kt`
 
 **Interfaces:**
 - Consumes: checkpoint 16 Android shared SDK API.
 - Produces: foreground-only permission/listening/promotion demo.
 
-- [ ] Add failing UI tests for permission, listening state, recognized promotion, cooldown display, and local CTA.
-- [ ] Implement Compose demo without network/ad/analytics permissions.
-- [ ] Verify Android build/tests plus native suites.
-- [ ] Commit: `feat: add Android Local ACR demo`
+- [x] Add failing demo behavior tests for permission, listening state, recognized promotion, cooldown display, and local CTA.
+- [x] Implement Compose demo without network/ad/analytics permissions.
+- [x] Verify Android build/tests plus native suites.
+- [x] Commit: `feat: add Android Local ACR demo`
 
 ## Checkpoint 18: iOS capture bridge
 
