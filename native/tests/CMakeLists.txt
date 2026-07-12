@@ -164,6 +164,44 @@ lacr_apply_strict_fp(recognizer_session_test)
 add_test(NAME recognizer_session_test COMMAND recognizer_session_test)
 set_tests_properties(recognizer_session_test PROPERTIES LABELS native-integration)
 
+add_executable(parity_goldens_test integration/parity_goldens_test.cpp)
+target_link_libraries(parity_goldens_test PRIVATE local_acr_core)
+target_include_directories(parity_goldens_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(parity_goldens_test PRIVATE cxx_std_20)
+lacr_apply_warnings(parity_goldens_test)
+lacr_apply_sanitizers(parity_goldens_test)
+lacr_apply_strict_fp(parity_goldens_test)
+target_compile_definitions(
+  parity_goldens_test
+  PRIVATE
+    LACR_SOURCE_DIR="${PROJECT_SOURCE_DIR}"
+)
+
+add_test(NAME parity_goldens_test COMMAND parity_goldens_test)
+set_tests_properties(parity_goldens_test PROPERTIES LABELS "native-integration;parity")
+
+add_executable(malformed_input_property_test integration/malformed_input_property_test.cpp)
+target_link_libraries(malformed_input_property_test PRIVATE local_acr_core)
+target_include_directories(malformed_input_property_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(malformed_input_property_test PRIVATE cxx_std_20)
+lacr_apply_warnings(malformed_input_property_test)
+lacr_apply_sanitizers(malformed_input_property_test)
+lacr_apply_strict_fp(malformed_input_property_test)
+
+add_test(NAME malformed_input_property_test COMMAND malformed_input_property_test)
+set_tests_properties(malformed_input_property_test PROPERTIES LABELS "native-integration;safety")
+
+add_executable(nominal_soak_test integration/nominal_soak_test.cpp)
+target_link_libraries(nominal_soak_test PRIVATE local_acr_core)
+target_include_directories(nominal_soak_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(nominal_soak_test PRIVATE cxx_std_20)
+lacr_apply_warnings(nominal_soak_test)
+lacr_apply_sanitizers(nominal_soak_test)
+lacr_apply_strict_fp(nominal_soak_test)
+
+add_test(NAME nominal_soak_test COMMAND nominal_soak_test)
+set_tests_properties(nominal_soak_test PROPERTIES LABELS "native-integration;soak")
+
 add_executable(spsc_pcm_queue_test unit/spsc_pcm_queue_test.cpp)
 target_link_libraries(spsc_pcm_queue_test PRIVATE local_acr_core)
 target_include_directories(spsc_pcm_queue_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")

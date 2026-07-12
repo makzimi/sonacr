@@ -64,7 +64,13 @@ bool valid_path(const char* path) noexcept {
   if (path == nullptr) {
     return false;
   }
-  return std::strlen(path) < 4096U;
+  const std::size_t length = std::strlen(path);
+  return length > 0U && length <= 4096U;
+}
+
+bool valid_sample_format(const lacr_sample_format_t format) noexcept {
+  return format == LACR_S16_INTERLEAVED || format == LACR_F32_INTERLEAVED ||
+         format == LACR_F32_PLANAR;
 }
 
 local_acr::SampleFormat sample_format(const lacr_sample_format_t format) noexcept {
@@ -81,6 +87,9 @@ local_acr::SampleFormat sample_format(const lacr_sample_format_t format) noexcep
 
 bool valid_pcm(const lacr_pcm_view_t* pcm) noexcept {
   if (pcm == nullptr || pcm->planes == nullptr || pcm->frames == 0U || pcm->channels == 0U) {
+    return false;
+  }
+  if (!valid_sample_format(pcm->format)) {
     return false;
   }
   if (pcm->format == LACR_F32_PLANAR) {
