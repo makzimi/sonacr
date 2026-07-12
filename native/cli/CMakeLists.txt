@@ -4,6 +4,7 @@ target_sources(
   local_acr_cli_lib
   PRIVATE
     src/audio_decoder.cpp
+    src/database_commands.cpp
     src/manifest.cpp
 )
 
@@ -48,4 +49,14 @@ if(LACR_BUILD_TESTS)
 
   add_test(NAME audio_decoder_test COMMAND audio_decoder_test)
   set_tests_properties(audio_decoder_test PROPERTIES LABELS cli-unit)
+
+  add_executable(database_commands_test tests/database_commands_test.cpp)
+  target_link_libraries(database_commands_test PRIVATE local_acr_cli_lib)
+  target_compile_features(database_commands_test PRIVATE cxx_std_20)
+  lacr_apply_warnings(database_commands_test)
+  lacr_apply_sanitizers(database_commands_test)
+  lacr_apply_strict_fp(database_commands_test)
+
+  add_test(NAME database_commands_test COMMAND database_commands_test)
+  set_tests_properties(database_commands_test PROPERTIES LABELS cli-unit)
 endif()

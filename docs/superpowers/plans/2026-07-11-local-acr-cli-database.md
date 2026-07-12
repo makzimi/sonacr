@@ -104,27 +104,27 @@ Commit: `feat: decode validated CLI audio inputs`
 - Consumes: `ValidatedManifest`, decoder PCM stream, `Fingerprinter`, `DatabaseWriter`, `DatabaseReader`.
 - Produces: `local-acr-db build`, `inspect`, `verify`, and `verify --release`.
 
-- [ ] **Step 1: Add failing command tests**
+- [x] **Step 1: Add failing command tests**
 
 Test command validation, durable output replacement, build report metadata, inspect output, ordinary verify, release verify rejection for non-frozen toolchain, and stable exit categories.
 
-- [ ] **Step 2: Run focused red tests**
+- [x] **Step 2: Run focused red tests**
 
 Expected: missing database command types and command handlers.
 
-- [ ] **Step 3: Implement build command**
+- [x] **Step 3: Implement build command**
 
 Decode each input, validate audio duration/silence/clipping/landmark counts/density, fingerprint, write via `DatabaseWriter`, reopen via `DatabaseReader`, then atomically replace output.
 
-- [ ] **Step 4: Implement inspect/verify commands**
+- [x] **Step 4: Implement inspect/verify commands**
 
 Inspect reads identity and summary. Verify uses `DatabaseReader`; release verification compares decoder/builder profile metadata.
 
-- [ ] **Step 5: Run command and sanitizer suites**
+- [x] **Step 5: Run command and sanitizer suites**
 
 Run focused CLI tests, full Debug, ASan/UBSan, and TSan suites.
 
-- [ ] **Step 6: Commit checkpoint 13**
+- [x] **Step 6: Commit checkpoint 13**
 
 Commit: `feat: build and verify local ACR databases`
 

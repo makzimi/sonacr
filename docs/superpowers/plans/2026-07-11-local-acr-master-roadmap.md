@@ -37,7 +37,7 @@ For every checkpoint:
 | 10 | Streaming engine | Four-second rolling recognition, evaluation schedule, reset, typed events, and injected-PCM tests. | 9 | `feat: run bounded recognition sessions` | committed |
 | 11 | Native C ABI | Opaque handles, SPSC queue, push/poll API, session generations, exception containment, and quiescent destruction. | 10 | `feat: expose safe native recognition ABI` | committed |
 | 12 | CLI input pipeline | Strict manifest parser and bounded no-shell FFprobe/FFmpeg streaming decoder. | 6 | `feat: decode validated CLI audio inputs` | committed |
-| 13 | Database commands | Durable build, inspect, verify, and frozen-toolchain `verify --release` commands. | 7, 12 | `feat: build and verify local ACR databases` | planned |
+| 13 | Database commands | Durable build, inspect, verify, and frozen-toolchain `verify --release` commands. | 7, 12 | `feat: build and verify local ACR databases` | committed |
 | 14 | Library ambiguity gate | Exact runtime matcher over every required sliding cross-trigger window during builds. | 9, 13 | `feat: reject ambiguous cue libraries` | planned |
 | 15 | KMP lifecycle API | Public types, typed errors, factory, prepare/start/stop/close, main-thread delivery, cooldown, and race tests. | 11 | `feat: add shared Local ACR lifecycle API` | planned |
 | 16 | Android capture | JNI direct-buffer binding and bounded `AudioRecord` capture with permission, discontinuity, and shutdown handling. | 15 | `feat: add Android microphone capture` | planned |
@@ -80,7 +80,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 10 | `feat: run bounded recognition sessions` | Injected PCM recognition, generation-tagged events, session restart/reset, query-density terminal error, Debug, ASan/UBSan, and TSan suites passed. |
 | 11 | `feat: expose safe native recognition ABI` | C11/C++ ABI callers, SPSC wrap/overflow/concurrency, event codec buffer retry, lifecycle/state errors, exported `lacr_*` symbols, Debug, ASan/UBSan, and TSan suites passed. |
 | 12 | `feat: decode validated CLI audio inputs` | Manifest duplicate-key/path/metadata/UTF-8 bounds, FFmpeg argv/no-shell process runner and stdout caps, Debug 24/24, ASan/UBSan 24/24, TSan 24/24, and iOS simulator core build passed. |
-| 13–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 13 | `feat: build and verify local ACR databases` | CLI build/inspect/verify/release-reject command tests, durable output replacement, build metadata, Debug 25/25, ASan/UBSan 25/25, TSan 25/25, and iOS simulator core build passed. |
+| 14–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 
