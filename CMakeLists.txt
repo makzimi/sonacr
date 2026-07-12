@@ -16,10 +16,17 @@ if(LACR_ENABLE_ASAN_UBSAN AND LACR_ENABLE_TSAN)
   message(FATAL_ERROR "ASan/UBSan and TSan must use separate build trees")
 endif()
 
-add_subdirectory(native/core)
-
 if(LACR_BUILD_TESTS)
   include(CTest)
   enable_testing()
+endif()
+
+add_subdirectory(native/core)
+
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS" AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android")
+  add_subdirectory(native/cli)
+endif()
+
+if(LACR_BUILD_TESTS)
   add_subdirectory(native/tests)
 endif()

@@ -36,7 +36,7 @@ For every checkpoint:
 | 9 | Recognition gates | Conservative evidence/separation/stability gates, confidence, ambiguity rejection, and matched position. | 8 | `feat: apply conservative recognition gates` | committed |
 | 10 | Streaming engine | Four-second rolling recognition, evaluation schedule, reset, typed events, and injected-PCM tests. | 9 | `feat: run bounded recognition sessions` | committed |
 | 11 | Native C ABI | Opaque handles, SPSC queue, push/poll API, session generations, exception containment, and quiescent destruction. | 10 | `feat: expose safe native recognition ABI` | committed |
-| 12 | CLI input pipeline | Strict manifest parser and bounded no-shell FFprobe/FFmpeg streaming decoder. | 6 | `feat: decode validated CLI audio inputs` | planned |
+| 12 | CLI input pipeline | Strict manifest parser and bounded no-shell FFprobe/FFmpeg streaming decoder. | 6 | `feat: decode validated CLI audio inputs` | committed |
 | 13 | Database commands | Durable build, inspect, verify, and frozen-toolchain `verify --release` commands. | 7, 12 | `feat: build and verify local ACR databases` | planned |
 | 14 | Library ambiguity gate | Exact runtime matcher over every required sliding cross-trigger window during builds. | 9, 13 | `feat: reject ambiguous cue libraries` | planned |
 | 15 | KMP lifecycle API | Public types, typed errors, factory, prepare/start/stop/close, main-thread delivery, cooldown, and race tests. | 11 | `feat: add shared Local ACR lifecycle API` | planned |
@@ -57,7 +57,7 @@ The roadmap is intentionally navigational. Exact files, interfaces, failing test
 | Subsystem | Checkpoints | Plan path | State |
 |---|---:|---|---|
 | Native engine | 1–11 | `docs/superpowers/plans/2026-07-11-local-acr-native-engine.md` | ready for execution |
-| CLI and database builder | 12–14 | `docs/superpowers/plans/2026-07-11-local-acr-cli-database.md` | create and review before checkpoint 12 |
+| CLI and database builder | 12–14 | `docs/superpowers/plans/2026-07-11-local-acr-cli-database.md` | ready for execution |
 | KMP and mobile applications | 15–19 | `docs/superpowers/plans/2026-07-11-local-acr-kmp-mobile.md` | create and review before checkpoint 15 |
 | Qualification and release | 20–22 | `docs/superpowers/plans/2026-07-11-local-acr-qualification-release.md` | create and review before checkpoint 20 |
 
@@ -79,7 +79,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 9 | `feat: apply conservative recognition gates` | Conservative-v1 evidence, coverage, margin, runner-up ratio, consecutive winner, offset stability, ambiguity, confidence, matched-position boundaries, Debug, ASan/UBSan, and TSan suites passed. |
 | 10 | `feat: run bounded recognition sessions` | Injected PCM recognition, generation-tagged events, session restart/reset, query-density terminal error, Debug, ASan/UBSan, and TSan suites passed. |
 | 11 | `feat: expose safe native recognition ABI` | C11/C++ ABI callers, SPSC wrap/overflow/concurrency, event codec buffer retry, lifecycle/state errors, exported `lacr_*` symbols, Debug, ASan/UBSan, and TSan suites passed. |
-| 12–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 12 | `feat: decode validated CLI audio inputs` | Manifest duplicate-key/path/metadata/UTF-8 bounds, FFmpeg argv/no-shell process runner and stdout caps, Debug 24/24, ASan/UBSan 24/24, TSan 24/24, and iOS simulator core build passed. |
+| 13–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 
