@@ -39,7 +39,7 @@ For every checkpoint:
 | 12 | CLI input pipeline | Strict manifest parser and bounded no-shell FFprobe/FFmpeg streaming decoder. | 6 | `feat: decode validated CLI audio inputs` | committed |
 | 13 | Database commands | Durable build, inspect, verify, and frozen-toolchain `verify --release` commands. | 7, 12 | `feat: build and verify local ACR databases` | committed |
 | 14 | Library ambiguity gate | Exact runtime matcher over every required sliding cross-trigger window during builds. | 9, 13 | `feat: reject ambiguous cue libraries` | committed |
-| 15 | KMP lifecycle API | Public types, typed errors, factory, prepare/start/stop/close, main-thread delivery, cooldown, and race tests. | 11 | `feat: add shared Local ACR lifecycle API` | planned |
+| 15 | KMP lifecycle API | Public types, typed errors, factory, prepare/start/stop/close, main-thread delivery, cooldown, and race tests. | 11 | `feat: add shared Local ACR lifecycle API` | committed |
 | 16 | Android capture | JNI direct-buffer binding and bounded `AudioRecord` capture with permission, discontinuity, and shutdown handling. | 15 | `feat: add Android microphone capture` | planned |
 | 17 | Android demo | API 26 Compose permission/listening/promotion flow using a bundled generated database. | 13, 14, 16 | `feat: add Android Local ACR demo` | planned |
 | 18 | iOS capture | Objective-C++ `AVAudioEngine` bridge and Kotlin/Native integration without Kotlin on the audio tap. | 15 | `feat: add iOS microphone capture bridge` | planned |
@@ -58,7 +58,7 @@ The roadmap is intentionally navigational. Exact files, interfaces, failing test
 |---|---:|---|---|
 | Native engine | 1–11 | `docs/superpowers/plans/2026-07-11-local-acr-native-engine.md` | ready for execution |
 | CLI and database builder | 12–14 | `docs/superpowers/plans/2026-07-11-local-acr-cli-database.md` | ready for execution |
-| KMP and mobile applications | 15–19 | `docs/superpowers/plans/2026-07-11-local-acr-kmp-mobile.md` | create and review before checkpoint 15 |
+| KMP and mobile applications | 15–19 | `docs/superpowers/plans/2026-07-11-local-acr-kmp-mobile.md` | ready for execution |
 | Qualification and release | 20–22 | `docs/superpowers/plans/2026-07-11-local-acr-qualification-release.md` | create and review before checkpoint 20 |
 
 This just-in-time expansion keeps later implementation details aligned with the interfaces and measurements established by earlier committed checkpoints without weakening any commit boundary.
@@ -82,7 +82,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 12 | `feat: decode validated CLI audio inputs` | Manifest duplicate-key/path/metadata/UTF-8 bounds, FFmpeg argv/no-shell process runner and stdout caps, Debug 24/24, ASan/UBSan 24/24, TSan 24/24, and iOS simulator core build passed. |
 | 13 | `feat: build and verify local ACR databases` | CLI build/inspect/verify/release-reject command tests, durable output replacement, build metadata, Debug 25/25, ASan/UBSan 25/25, TSan 25/25, and iOS simulator core build passed. |
 | 14 | `feat: reject ambiguous cue libraries` | Build-time ambiguity gate excludes self matches, checks overlapping windows, rejects runtime-passing cross-trigger pairs before output replacement, Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator core build passed. |
-| 15–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 15 | `feat: add shared Local ACR lifecycle API` | KMP shared JVM lifecycle tests passed via checked-in Gradle wrapper; factory validation, prepare/start/stop/close, main-dispatch, cooldown, stale delivery suppression, runtime error, invalid-state tests covered; native Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator core build passed. |
+| 16–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 
