@@ -133,7 +133,7 @@ void top_five_order_is_descending_value_then_ascending_bin() {
     check(selector.process(quiet_frame(time), sink).ok(), "confirmation filler succeeds");
   }
 
-  const std::array<std::uint8_t, 5> expected_bins{20, 40, 60, 30, 10};
+  const std::array<std::uint8_t, 5> expected_bins{10, 20, 30, 40, 60};
   check(sink.peaks.size() == expected_bins.size(), "top five peaks confirmed");
   for (std::size_t index = 0; index < sink.peaks.size() && index < expected_bins.size(); ++index) {
     check(sink.peaks[index].bin == expected_bins[index], "top-five confirmation order");

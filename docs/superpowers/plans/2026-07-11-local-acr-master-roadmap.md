@@ -30,7 +30,7 @@ For every checkpoint:
 | 3b | Analysis frames | Checked Hann coefficients, 512/128 streaming frames, source mapping, and finite partial-frame discard. | 3a | `feat: produce canonical analysis frames` | committed |
 | 4 | Spectral decisions | Scalar KISS FFT power, deterministic logarithmic weighting, and Q16.16 temporal filtering. | 3b | `feat: add deterministic spectral analysis` | committed |
 | 5 | Peak confirmation | Adaptive masks, bounded provisional peaks, 22-hop confirmation, and finite/live EOF equivalence. | 4 | `feat: confirm adaptive spectral peaks` | committed |
-| 6 | Landmark fingerprints | Stable peak pairing, 24-bit hashes, deterministic ordering, deduplication, and bounded state. | 5 | `feat: generate landmark fingerprints` | planned |
+| 6 | Landmark fingerprints | Stable peak pairing, 24-bit hashes, deterministic ordering, deduplication, and bounded state. | 5 | `feat: generate landmark fingerprints` | committed |
 | 7 | Database core | Prefixed SQLite schema, canonical metadata/digest, integrity checks, resource bounds, and read-only ownership. | 6 | `feat: persist validated fingerprint databases` | planned |
 | 8 | Candidate alignment | Bounded indexed lookup, unique query voting, floor-quantized offsets, and disjoint secondary aggregates. | 7 | `feat: align fingerprint candidates` | planned |
 | 9 | Recognition gates | Conservative evidence/separation/stability gates, confidence, ambiguity rejection, and matched position. | 8 | `feat: apply conservative recognition gates` | planned |
@@ -73,7 +73,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 3b | `feat: produce canonical analysis frames` | High-precision Hann generator reproduced byte-for-byte; exact 512/128 origins, 32 ring-wrap partition trials, reset, and partial-tail discard verified. |
 | 4 | `feat: add deterministic spectral analysis` | KISS FFT archive digest verified; log/weight tables reproduced byte-for-byte; focused spectral vectors, Debug, ASan/UBSan, and TSan suites passed; strict FP flags inspected. |
 | 5 | `feat: confirm adaptive spectral peaks` | Gaussian penalties reproduced byte-for-byte; warm-up, plateau ties, top-five ordering, newer suppression, 22-hop confirmation, finite EOF, bounded storage, Debug, ASan/UBSan, and TSan suites passed. |
-| 6–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 6 | `feat: generate landmark fingerprints` | Hash packing, delta/bin boundaries, duplicate identity retention, anchor expiry, PCM-to-landmark chunk invariance, Debug, ASan/UBSan, and TSan suites passed. |
+| 7–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 

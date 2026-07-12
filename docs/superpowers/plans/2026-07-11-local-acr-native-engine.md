@@ -357,27 +357,27 @@ Commit: `feat: confirm adaptive spectral peaks`
 - Consumes: `ConfirmedPeak` stream or PCM through `Fingerprinter`.
 - Produces: `Landmark { uint32_t hash; uint32_t anchor_time_frame; }`, with identity `(hash, anchor_time_frame)`.
 
-- [ ] **Step 1: Add failing hash-layout and ordering tests**
+- [x] **Step 1: Add failing hash-layout and ordering tests**
 
 Cover delta times 4 and 96, rejection outside range, bin delta 32 boundary, bins 1 and 255, three-target cap, target ordering, 24-bit packing, reserved upper byte zero, duplicate identity retention, and anchor expiry after all 96-hop targets pass.
 
-- [ ] **Step 2: Run the focused red tests**
+- [x] **Step 2: Run the focused red tests**
 
 Expected: compile failure because `LandmarkBuilder` is absent.
 
-- [ ] **Step 3: Implement bounded pairing and serialization**
+- [x] **Step 3: Implement bounded pairing and serialization**
 
 Order confirmed peaks by time then bin. For each anchor, inspect targets by delta then bin, emit the first three valid pairs, compute `anchor_bin | (target_bin << 8) | (delta_time << 16)`, and retain the first duplicate identity only.
 
-- [ ] **Step 4: Compose the native fingerprinter**
+- [x] **Step 4: Compose the native fingerprinter**
 
 `Fingerprinter` owns `PcmIngress`, `Resampler`, `FrameStream`, `Spectrum`, `TemporalFilter`, `PeakSelector`, and `LandmarkBuilder`; `reset()` clears every state object; finite finish drains only normative samples/anchors.
 
-- [ ] **Step 5: Run component and PCM-to-landmark goldens**
+- [x] **Step 5: Run component and PCM-to-landmark goldens**
 
 Run focused tests and the full native suite. Feed identical canonical PCM with multiple input chunkings and require byte-identical landmark sequences.
 
-- [ ] **Step 6: Commit checkpoint 6**
+- [x] **Step 6: Commit checkpoint 6**
 
 Commit: `feat: generate landmark fingerprints`
 

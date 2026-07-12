@@ -87,6 +87,28 @@ lacr_apply_strict_fp(peak_selector_test)
 add_test(NAME peak_selector_test COMMAND peak_selector_test)
 set_tests_properties(peak_selector_test PROPERTIES LABELS native-unit)
 
+add_executable(landmark_builder_test unit/landmark_builder_test.cpp)
+target_link_libraries(landmark_builder_test PRIVATE local_acr_core)
+target_include_directories(landmark_builder_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(landmark_builder_test PRIVATE cxx_std_20)
+lacr_apply_warnings(landmark_builder_test)
+lacr_apply_sanitizers(landmark_builder_test)
+lacr_apply_strict_fp(landmark_builder_test)
+
+add_test(NAME landmark_builder_test COMMAND landmark_builder_test)
+set_tests_properties(landmark_builder_test PROPERTIES LABELS native-unit)
+
+add_executable(fingerprinter_test integration/fingerprinter_test.cpp)
+target_link_libraries(fingerprinter_test PRIVATE local_acr_core)
+target_include_directories(fingerprinter_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(fingerprinter_test PRIVATE cxx_std_20)
+lacr_apply_warnings(fingerprinter_test)
+lacr_apply_sanitizers(fingerprinter_test)
+lacr_apply_strict_fp(fingerprinter_test)
+
+add_test(NAME fingerprinter_test COMMAND fingerprinter_test)
+set_tests_properties(fingerprinter_test PROPERTIES LABELS native-integration)
+
 add_test(
   NAME dependency_digest_test
   COMMAND

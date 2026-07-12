@@ -200,6 +200,13 @@ Status PeakSelector::confirm_expired(std::uint64_t time_frame, PeakSink& sink) n
   }
 
   if (emit_count > 0) {
+    std::sort(emit_buffer_.begin(), emit_buffer_.begin() + static_cast<std::ptrdiff_t>(emit_count),
+              [](const ConfirmedPeak& lhs, const ConfirmedPeak& rhs) {
+                if (lhs.time_frame != rhs.time_frame) {
+                  return lhs.time_frame < rhs.time_frame;
+                }
+                return lhs.bin < rhs.bin;
+              });
     const Status status = sink.consume(std::span<const ConfirmedPeak>{emit_buffer_.data(), emit_count});
     if (!status.ok()) {
       return status;
