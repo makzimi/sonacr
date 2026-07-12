@@ -5,6 +5,7 @@ import com.localacr.internal.MainDispatcher
 import com.localacr.internal.MonotonicClock
 import com.localacr.internal.NativeEvent
 import com.localacr.internal.NativeSessionPort
+import com.localacr.internal.PcmBuffer
 import com.localacr.internal.PlatformPorts
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -204,6 +205,8 @@ private class FakeNativeSession : NativeSessionPort {
         return null
     }
 
+    override fun pushPcm(pcm: PcmBuffer): RecognitionError? = null
+
     override fun stop() {
         listening = false
     }
@@ -243,7 +246,7 @@ private class FakePorts : PlatformPorts {
     override val mainDispatcher: MainDispatcher = main
     override val monotonicClock: MonotonicClock = clock
     override fun openNativeSession(databasePath: String, config: RecognitionConfig): NativeSessionPort = native
-    override fun openCapture(): CapturePort = capture
+    override fun openCapture(nativeSession: NativeSessionPort): CapturePort = capture
 
     fun emitRecognition(triggerId: String, nowMs: Long) {
         clock.now = nowMs

@@ -40,7 +40,7 @@ For every checkpoint:
 | 13 | Database commands | Durable build, inspect, verify, and frozen-toolchain `verify --release` commands. | 7, 12 | `feat: build and verify local ACR databases` | committed |
 | 14 | Library ambiguity gate | Exact runtime matcher over every required sliding cross-trigger window during builds. | 9, 13 | `feat: reject ambiguous cue libraries` | committed |
 | 15 | KMP lifecycle API | Public types, typed errors, factory, prepare/start/stop/close, main-thread delivery, cooldown, and race tests. | 11 | `feat: add shared Local ACR lifecycle API` | committed |
-| 16 | Android capture | JNI direct-buffer binding and bounded `AudioRecord` capture with permission, discontinuity, and shutdown handling. | 15 | `feat: add Android microphone capture` | planned |
+| 16 | Android capture | JNI direct-buffer binding and bounded `AudioRecord` capture with permission, discontinuity, and shutdown handling. | 15 | `feat: add Android microphone capture` | committed |
 | 17 | Android demo | API 26 Compose permission/listening/promotion flow using a bundled generated database. | 13, 14, 16 | `feat: add Android Local ACR demo` | planned |
 | 18 | iOS capture | Objective-C++ `AVAudioEngine` bridge and Kotlin/Native integration without Kotlin on the audio tap. | 15 | `feat: add iOS microphone capture bridge` | planned |
 | 19 | iOS demo | iOS 15 SwiftUI permission/listening/promotion flow using the same database. | 13, 14, 18 | `feat: add iOS Local ACR demo` | planned |
@@ -83,7 +83,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 13 | `feat: build and verify local ACR databases` | CLI build/inspect/verify/release-reject command tests, durable output replacement, build metadata, Debug 25/25, ASan/UBSan 25/25, TSan 25/25, and iOS simulator core build passed. |
 | 14 | `feat: reject ambiguous cue libraries` | Build-time ambiguity gate excludes self matches, checks overlapping windows, rejects runtime-passing cross-trigger pairs before output replacement, Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator core build passed. |
 | 15 | `feat: add shared Local ACR lifecycle API` | KMP shared JVM lifecycle tests passed via checked-in Gradle wrapper; factory validation, prepare/start/stop/close, main-dispatch, cooldown, stale delivery suppression, runtime error, invalid-state tests covered; native Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator core build passed. |
-| 16–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 16 | `feat: add Android microphone capture` | Android shared `testDebugUnitTest`, `jvmTest`, and `assembleDebug` passed with rerun-tasks; direct ByteBuffer JNI bridge, AudioRecord direct-buffer capture, source-frame continuity, MIC fallback, and native-event mapping covered; native Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator core build passed. |
+| 17–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 

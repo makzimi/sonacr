@@ -53,26 +53,27 @@ class LocalAcrRecognizer internal constructor(
 
         state = RecognitionState.Starting
         dispatchState(listener, RecognitionState.Starting)
-        val nextCapture = ports.openCapture()
-        val captureError = nextCapture.start()
-        if (captureError != null) {
-            nextCapture.stop()
-            state = RecognitionState.Ready
-            dispatchState(listener, RecognitionState.Ready)
-            completeOperation(completion, captureError)
-            return
-        }
-
         val generation = ++sessionGeneration
         runtimeErrorDelivered = false
         cooldownByTrigger.clear()
         val startError = session.start { event -> onNativeEvent(generation, event) }
         if (startError != null) {
-            nextCapture.stop()
             ++sessionGeneration
             state = RecognitionState.Ready
             dispatchState(listener, RecognitionState.Ready)
             completeOperation(completion, startError)
+            return
+        }
+
+        val nextCapture = ports.openCapture(session)
+        val captureError = nextCapture.start()
+        if (captureError != null) {
+            session.stop()
+            nextCapture.stop()
+            ++sessionGeneration
+            state = RecognitionState.Ready
+            dispatchState(listener, RecognitionState.Ready)
+            completeOperation(completion, captureError)
             return
         }
 

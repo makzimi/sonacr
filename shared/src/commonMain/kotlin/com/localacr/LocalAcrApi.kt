@@ -1,7 +1,7 @@
 package com.localacr
 
 import com.localacr.internal.PlatformPorts
-import com.localacr.internal.UnavailablePlatformPorts
+import com.localacr.internal.defaultPlatformPorts
 
 data class RecognitionConfig(
     val duplicateCooldownMs: Long = 30_000,
@@ -35,10 +35,10 @@ interface RecognitionListener {
 
 object LocalAcrFactory {
     fun create(databasePath: String): CreateResult =
-        create(databasePath, RecognitionConfig(), UnavailablePlatformPorts)
+        create(databasePath, RecognitionConfig(), defaultPlatformPorts())
 
     fun create(databasePath: String, config: RecognitionConfig): CreateResult =
-        create(databasePath, config, UnavailablePlatformPorts)
+        create(databasePath, config, defaultPlatformPorts())
 
     internal fun create(
         databasePath: String,

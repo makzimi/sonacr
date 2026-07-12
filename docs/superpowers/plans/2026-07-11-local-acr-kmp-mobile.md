@@ -114,11 +114,11 @@ Commit: `feat: add shared Local ACR lifecycle API`
 - Consumes: checkpoint 15 `NativeSessionPort`, `CapturePort`, `MainDispatcher`, `MonotonicClock`.
 - Produces: Android port factory and JNI direct-buffer binding.
 
-- [ ] Add failing JNI/direct-buffer and capture lifecycle tests.
-- [ ] Implement native library loading and JNI wrapper.
-- [ ] Implement bounded `AudioRecord` capture thread with permission/capture errors.
-- [ ] Verify Android unit/instrumentation target where available and native suites.
-- [ ] Commit: `feat: add Android microphone capture`
+- [x] Add failing JNI/direct-buffer and capture lifecycle tests.
+- [x] Implement native library loading and JNI wrapper.
+- [x] Implement bounded `AudioRecord` capture thread with permission/capture errors.
+- [x] Verify Android unit/instrumentation target where available and native suites.
+- [x] Commit: `feat: add Android microphone capture`
 
 ## Checkpoint 17: Android demo
 

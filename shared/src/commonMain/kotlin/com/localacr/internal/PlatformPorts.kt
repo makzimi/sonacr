@@ -16,6 +16,7 @@ interface MonotonicClock {
 interface NativeSessionPort {
     fun prepare(): RecognitionError?
     fun start(onEvent: (NativeEvent) -> Unit): RecognitionError?
+    fun pushPcm(pcm: PcmBuffer): RecognitionError?
     fun stop()
     fun close()
 }
@@ -29,7 +30,22 @@ interface PlatformPorts {
     val mainDispatcher: MainDispatcher
     val monotonicClock: MonotonicClock
     fun openNativeSession(databasePath: String, config: RecognitionConfig): NativeSessionPort
-    fun openCapture(): CapturePort
+    fun openCapture(nativeSession: NativeSessionPort): CapturePort
+}
+
+data class PcmBuffer(
+    val buffer: Any,
+    val frames: Int,
+    val channels: Int,
+    val sampleRate: Int,
+    val firstSourceFrame: Long,
+    val format: Format,
+) {
+    enum class Format {
+        S16Interleaved,
+        F32Interleaved,
+        F32Planar,
+    }
 }
 
 sealed class NativeEvent {
@@ -59,11 +75,18 @@ object UnavailablePlatformPorts : PlatformPorts {
                     recoverable = false,
                 )
 
+            override fun pushPcm(pcm: PcmBuffer): RecognitionError =
+                RecognitionError(
+                    RecognitionErrorCode.NativeEngineFailure,
+                    "Platform native session is not installed",
+                    recoverable = false,
+                )
+
             override fun stop() = Unit
             override fun close() = Unit
         }
 
-    override fun openCapture(): CapturePort =
+    override fun openCapture(nativeSession: NativeSessionPort): CapturePort =
         object : CapturePort {
             override fun start(): RecognitionError =
                 RecognitionError(
@@ -75,3 +98,5 @@ object UnavailablePlatformPorts : PlatformPorts {
             override fun stop() = Unit
         }
 }
+
+internal expect fun defaultPlatformPorts(): PlatformPorts
