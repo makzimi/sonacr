@@ -164,6 +164,46 @@ lacr_apply_strict_fp(recognizer_session_test)
 add_test(NAME recognizer_session_test COMMAND recognizer_session_test)
 set_tests_properties(recognizer_session_test PROPERTIES LABELS native-integration)
 
+add_executable(spsc_pcm_queue_test unit/spsc_pcm_queue_test.cpp)
+target_link_libraries(spsc_pcm_queue_test PRIVATE local_acr_core)
+target_include_directories(spsc_pcm_queue_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(spsc_pcm_queue_test PRIVATE cxx_std_20)
+lacr_apply_warnings(spsc_pcm_queue_test)
+lacr_apply_sanitizers(spsc_pcm_queue_test)
+lacr_apply_strict_fp(spsc_pcm_queue_test)
+
+add_test(NAME spsc_pcm_queue_test COMMAND spsc_pcm_queue_test)
+set_tests_properties(spsc_pcm_queue_test PROPERTIES LABELS native-unit)
+
+add_executable(event_codec_test unit/event_codec_test.cpp)
+target_link_libraries(event_codec_test PRIVATE local_acr_core)
+target_include_directories(event_codec_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(event_codec_test PRIVATE cxx_std_20)
+lacr_apply_warnings(event_codec_test)
+lacr_apply_sanitizers(event_codec_test)
+lacr_apply_strict_fp(event_codec_test)
+
+add_test(NAME event_codec_test COMMAND event_codec_test)
+set_tests_properties(event_codec_test PROPERTIES LABELS native-unit)
+
+add_executable(c_api_test integration/c_api_test.c)
+target_link_libraries(c_api_test PRIVATE local_acr_core)
+target_compile_features(c_api_test PRIVATE c_std_11)
+lacr_apply_sanitizers(c_api_test)
+
+add_test(NAME c_api_test COMMAND c_api_test)
+set_tests_properties(c_api_test PROPERTIES LABELS native-integration)
+
+add_executable(c_api_concurrency_test integration/c_api_concurrency_test.cpp)
+target_link_libraries(c_api_concurrency_test PRIVATE local_acr_core)
+target_compile_features(c_api_concurrency_test PRIVATE cxx_std_20)
+lacr_apply_warnings(c_api_concurrency_test)
+lacr_apply_sanitizers(c_api_concurrency_test)
+lacr_apply_strict_fp(c_api_concurrency_test)
+
+add_test(NAME c_api_concurrency_test COMMAND c_api_concurrency_test)
+set_tests_properties(c_api_concurrency_test PROPERTIES LABELS native-integration)
+
 if(APPLE)
   find_library(LACR_SYSTEM_SQLITE_LIBRARY sqlite3)
   if(LACR_SYSTEM_SQLITE_LIBRARY)

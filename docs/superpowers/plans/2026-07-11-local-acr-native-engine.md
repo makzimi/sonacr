@@ -557,27 +557,27 @@ Commit: `feat: run bounded recognition sessions`
 - Consumes: the exact opaque-handle calls, session generation, and PCM views from Section 18.
 - Produces: stable C status codes; `lacr_recognizer_create`, `prepare`, `start_session`, `push_pcm`, `poll_event`, `stop_session`, and `destroy`.
 
-- [ ] **Step 1: Add failing C compilation and ABI behavior tests**
+- [x] **Step 1: Add failing C compilation and ABI behavior tests**
 
 Compile the public header as C11 and C++20. Test null/invalid pointers, embedded-NUL/length limits, create/prepare states, one producer/one poller rule, buffer-too-small retry without consumption, overflow/discontinuity event, exception conversion, stop invalidation, and destroy from Created/Ready/Failed/never-started states.
 
-- [ ] **Step 2: Add failing SPSC wrap/overflow tests**
+- [x] **Step 2: Add failing SPSC wrap/overflow tests**
 
 Cover exact capacity, wraparound, one-second negotiated byte bound, release/acquire visibility, producer overflow without blocking, consumer order, and TSan producer/consumer loops.
 
-- [ ] **Step 3: Implement the queue and versioned event codec**
+- [x] **Step 3: Implement the queue and versioned event codec**
 
 Preallocate queue storage before listening. Copy PCM during `push_pcm` without allocation or locks. Encode fixed-width event headers plus length-delimited UTF-8 payloads; on insufficient storage report required bytes and consume nothing.
 
-- [ ] **Step 4: Implement ABI containment and lifecycle admission**
+- [x] **Step 4: Implement ABI containment and lifecycle admission**
 
 Catch all exceptions at every ABI boundary. Enforce serialized control calls, one producer, and one poller. Use an external controller closing gate: admit no new calls after close begins, join producer and poller, wait for admitted calls, then destroy. Treat native runtime errors as session-generation events that the KMP controller can promote to its control epoch.
 
-- [ ] **Step 5: Run C, concurrency, sanitizer, and symbol tests**
+- [x] **Step 5: Run C, concurrency, sanitizer, and symbol tests**
 
 Run the C caller suite, native integration suite, ASan+UBSan, TSan, and exported-symbol inspection. Expected: only documented `lacr_*` symbols are externally visible and no race/deadlock is reported.
 
-- [ ] **Step 6: Run the complete native checkpoint suite**
+- [x] **Step 6: Run the complete native checkpoint suite**
 
 Run: `ctest --preset macos-clang-debug --output-on-failure`
 
@@ -587,7 +587,7 @@ Run: `ctest --preset macos-tsan --output-on-failure`
 
 Expected: all native unit/integration tests pass with zero sanitizer findings.
 
-- [ ] **Step 7: Commit checkpoint 11**
+- [x] **Step 7: Commit checkpoint 11**
 
 Commit: `feat: expose safe native recognition ABI`
 

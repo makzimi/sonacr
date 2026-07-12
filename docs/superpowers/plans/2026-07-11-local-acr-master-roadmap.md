@@ -35,7 +35,7 @@ For every checkpoint:
 | 8 | Candidate alignment | Bounded indexed lookup, unique query voting, floor-quantized offsets, and disjoint secondary aggregates. | 7 | `feat: align fingerprint candidates` | committed |
 | 9 | Recognition gates | Conservative evidence/separation/stability gates, confidence, ambiguity rejection, and matched position. | 8 | `feat: apply conservative recognition gates` | committed |
 | 10 | Streaming engine | Four-second rolling recognition, evaluation schedule, reset, typed events, and injected-PCM tests. | 9 | `feat: run bounded recognition sessions` | committed |
-| 11 | Native C ABI | Opaque handles, SPSC queue, push/poll API, session generations, exception containment, and quiescent destruction. | 10 | `feat: expose safe native recognition ABI` | planned |
+| 11 | Native C ABI | Opaque handles, SPSC queue, push/poll API, session generations, exception containment, and quiescent destruction. | 10 | `feat: expose safe native recognition ABI` | committed |
 | 12 | CLI input pipeline | Strict manifest parser and bounded no-shell FFprobe/FFmpeg streaming decoder. | 6 | `feat: decode validated CLI audio inputs` | planned |
 | 13 | Database commands | Durable build, inspect, verify, and frozen-toolchain `verify --release` commands. | 7, 12 | `feat: build and verify local ACR databases` | planned |
 | 14 | Library ambiguity gate | Exact runtime matcher over every required sliding cross-trigger window during builds. | 9, 13 | `feat: reject ambiguous cue libraries` | planned |
@@ -78,7 +78,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 8 | `feat: align fingerprint candidates` | Repeated-hash vote deduplication, negative floor offsets, 256-hash SQL chunks, expansion cutoff, per-trigger isolation, disjoint secondary centers, Debug, ASan/UBSan, and TSan suites passed. |
 | 9 | `feat: apply conservative recognition gates` | Conservative-v1 evidence, coverage, margin, runner-up ratio, consecutive winner, offset stability, ambiguity, confidence, matched-position boundaries, Debug, ASan/UBSan, and TSan suites passed. |
 | 10 | `feat: run bounded recognition sessions` | Injected PCM recognition, generation-tagged events, session restart/reset, query-density terminal error, Debug, ASan/UBSan, and TSan suites passed. |
-| 11–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 11 | `feat: expose safe native recognition ABI` | C11/C++ ABI callers, SPSC wrap/overflow/concurrency, event codec buffer retry, lifecycle/state errors, exported `lacr_*` symbols, Debug, ASan/UBSan, and TSan suites passed. |
+| 12–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 

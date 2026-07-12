@@ -101,6 +101,9 @@ target_sources(
     src/matcher/conservative_matcher.cpp
     src/matcher/offset_accumulator.cpp
     src/session/recognizer.cpp
+    src/session/c_api.cpp
+    src/session/event_codec.cpp
+    src/session/spsc_pcm_queue.cpp
     src/audio/speex_resampler.cpp
     src/support/sha256.cpp
     src/support/version.cpp
