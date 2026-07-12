@@ -141,27 +141,27 @@ Commit: `feat: build and verify local ACR databases`
 - Consumes: per-trigger fingerprints/windows and `ConservativeMatcher`.
 - Produces: build-time rejection for cue libraries where cross-trigger windows pass runtime gates.
 
-- [ ] **Step 1: Add failing ambiguity tests**
+- [x] **Step 1: Add failing ambiguity tests**
 
 Test self matches are excluded, overlapping cross-trigger windows are checked every 255 ms, exact runtime gates are used, and ambiguous pairs produce trigger-specific diagnostics.
 
-- [ ] **Step 2: Run focused red tests**
+- [x] **Step 2: Run focused red tests**
 
 Expected: missing ambiguity gate types.
 
-- [ ] **Step 3: Implement ambiguity prefilter and exact matcher pass**
+- [x] **Step 3: Implement ambiguity prefilter and exact matcher pass**
 
 Use a hash-intersection prefilter, then evaluate sliding two-to-four-second windows with the same candidate lookup/alignment/matcher semantics as runtime.
 
-- [ ] **Step 4: Integrate into build**
+- [x] **Step 4: Integrate into build**
 
 Reject ambiguous libraries before writing final output and store successful ambiguity summary in `build_report_json`.
 
-- [ ] **Step 5: Run complete CLI/native suites**
+- [x] **Step 5: Run complete CLI/native suites**
 
 Run focused ambiguity tests, full Debug, ASan/UBSan, and TSan suites.
 
-- [ ] **Step 6: Commit checkpoint 14**
+- [x] **Step 6: Commit checkpoint 14**
 
 Commit: `feat: reject ambiguous cue libraries`
 

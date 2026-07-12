@@ -89,6 +89,19 @@ std::filesystem::path make_manifest() {
   return manifest;
 }
 
+std::filesystem::path make_ambiguous_manifest() {
+  make_audio("audio/a.mp3");
+  make_audio("audio/b.mp3");
+  const std::filesystem::path manifest = temp_dir() / "ambiguous.json";
+  write_file(
+      manifest,
+      "{\"schemaVersion\":1,\"databaseId\":\"venue-demo\",\"databaseVersion\":\"2026.07.12\","
+      "\"triggers\":["
+      "{\"id\":\"checkin_a\",\"displayName\":\"Check-in A\",\"audio\":\"audio/a.mp3\",\"metadata\":{}},"
+      "{\"id\":\"checkin_b\",\"displayName\":\"Check-in B\",\"audio\":\"audio/b.mp3\",\"metadata\":{}}]}");
+  return manifest;
+}
+
 void invalid_command_returns_stable_validation_exit() {
   FakeDecoder decoder;
   const local_acr::cli::CommandResult result =
@@ -156,6 +169,21 @@ void inspect_and_verify_read_built_database() {
         "release verify rejects non-frozen toolchain database");
 }
 
+void build_rejects_ambiguous_trigger_library_before_replacing_output() {
+  FakeDecoder decoder;
+  const std::filesystem::path manifest = make_ambiguous_manifest();
+  const std::filesystem::path output = temp_dir() / "ambiguous-output.lacrdb";
+  write_file(output, "old-db");
+
+  const local_acr::cli::CommandResult result =
+      local_acr::cli::run_database_command({"local_acr_db", "build", manifest.string(), output.string()}, &decoder);
+
+  check(result.exit_code == local_acr::cli::ExitCode::Validation, "ambiguous build uses validation exit");
+  check(result.stderr_text.find("checkin_a") != std::string::npos, "ambiguity diagnostic names first trigger");
+  check(result.stderr_text.find("checkin_b") != std::string::npos, "ambiguity diagnostic names second trigger");
+  check(read_file(output) == "old-db", "ambiguous build does not replace existing output");
+}
+
 void verify_corrupt_database_returns_validation() {
   FakeDecoder decoder;
   const std::filesystem::path corrupt = temp_dir() / "corrupt.lacrdb";
@@ -173,6 +201,7 @@ int main() {
   build_writes_database_durably_and_reports_metadata();
   build_accepts_output_in_current_directory();
   inspect_and_verify_read_built_database();
+  build_rejects_ambiguous_trigger_library_before_replacing_output();
   verify_corrupt_database_returns_validation();
   return failures == 0 ? 0 : 1;
 }

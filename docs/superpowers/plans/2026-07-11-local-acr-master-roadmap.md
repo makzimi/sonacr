@@ -38,7 +38,7 @@ For every checkpoint:
 | 11 | Native C ABI | Opaque handles, SPSC queue, push/poll API, session generations, exception containment, and quiescent destruction. | 10 | `feat: expose safe native recognition ABI` | committed |
 | 12 | CLI input pipeline | Strict manifest parser and bounded no-shell FFprobe/FFmpeg streaming decoder. | 6 | `feat: decode validated CLI audio inputs` | committed |
 | 13 | Database commands | Durable build, inspect, verify, and frozen-toolchain `verify --release` commands. | 7, 12 | `feat: build and verify local ACR databases` | committed |
-| 14 | Library ambiguity gate | Exact runtime matcher over every required sliding cross-trigger window during builds. | 9, 13 | `feat: reject ambiguous cue libraries` | planned |
+| 14 | Library ambiguity gate | Exact runtime matcher over every required sliding cross-trigger window during builds. | 9, 13 | `feat: reject ambiguous cue libraries` | committed |
 | 15 | KMP lifecycle API | Public types, typed errors, factory, prepare/start/stop/close, main-thread delivery, cooldown, and race tests. | 11 | `feat: add shared Local ACR lifecycle API` | planned |
 | 16 | Android capture | JNI direct-buffer binding and bounded `AudioRecord` capture with permission, discontinuity, and shutdown handling. | 15 | `feat: add Android microphone capture` | planned |
 | 17 | Android demo | API 26 Compose permission/listening/promotion flow using a bundled generated database. | 13, 14, 16 | `feat: add Android Local ACR demo` | planned |
@@ -81,7 +81,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 11 | `feat: expose safe native recognition ABI` | C11/C++ ABI callers, SPSC wrap/overflow/concurrency, event codec buffer retry, lifecycle/state errors, exported `lacr_*` symbols, Debug, ASan/UBSan, and TSan suites passed. |
 | 12 | `feat: decode validated CLI audio inputs` | Manifest duplicate-key/path/metadata/UTF-8 bounds, FFmpeg argv/no-shell process runner and stdout caps, Debug 24/24, ASan/UBSan 24/24, TSan 24/24, and iOS simulator core build passed. |
 | 13 | `feat: build and verify local ACR databases` | CLI build/inspect/verify/release-reject command tests, durable output replacement, build metadata, Debug 25/25, ASan/UBSan 25/25, TSan 25/25, and iOS simulator core build passed. |
-| 14–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 14 | `feat: reject ambiguous cue libraries` | Build-time ambiguity gate excludes self matches, checks overlapping windows, rejects runtime-passing cross-trigger pairs before output replacement, Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator core build passed. |
+| 15–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 

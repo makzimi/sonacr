@@ -4,6 +4,7 @@ target_sources(
   local_acr_cli_lib
   PRIVATE
     src/audio_decoder.cpp
+    src/ambiguity_gate.cpp
     src/database_commands.cpp
     src/manifest.cpp
 )
@@ -59,4 +60,14 @@ if(LACR_BUILD_TESTS)
 
   add_test(NAME database_commands_test COMMAND database_commands_test)
   set_tests_properties(database_commands_test PROPERTIES LABELS cli-unit)
+
+  add_executable(ambiguity_gate_test tests/ambiguity_gate_test.cpp)
+  target_link_libraries(ambiguity_gate_test PRIVATE local_acr_cli_lib)
+  target_compile_features(ambiguity_gate_test PRIVATE cxx_std_20)
+  lacr_apply_warnings(ambiguity_gate_test)
+  lacr_apply_sanitizers(ambiguity_gate_test)
+  lacr_apply_strict_fp(ambiguity_gate_test)
+
+  add_test(NAME ambiguity_gate_test COMMAND ambiguity_gate_test)
+  set_tests_properties(ambiguity_gate_test PROPERTIES LABELS cli-unit)
 endif()

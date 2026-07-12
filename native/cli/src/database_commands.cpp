@@ -1,5 +1,6 @@
 #include "database_commands.hpp"
 
+#include "ambiguity_gate.hpp"
 #include "audio_decoder.hpp"
 #include "audio/pcm_view.hpp"
 #include "database/database_reader.hpp"
@@ -202,6 +203,15 @@ CommandResult build_command(const std::filesystem::path& manifest_path,
       "{\"builder\":\"" + std::string(kBuilderProfile) + "\",\"decoder\":\"" + database.metadata.decoder_version +
       "\",\"triggers\":" + std::to_string(database.triggers.size()) + ",\"fingerprints\":" +
       std::to_string(database.fingerprints.size()) + "}";
+
+  const AmbiguityGateResult ambiguity = check_ambiguity(database);
+  if (!ambiguity.accepted) {
+    return result(ExitCode::Validation, {}, ambiguity.diagnostic_json + "\n");
+  }
+  database.metadata.build_report_json =
+      "{\"builder\":\"" + std::string(kBuilderProfile) + "\",\"decoder\":\"" + database.metadata.decoder_version +
+      "\",\"triggers\":" + std::to_string(database.triggers.size()) + ",\"fingerprints\":" +
+      std::to_string(database.fingerprints.size()) + ",\"ambiguity\":" + ambiguity.diagnostic_json + "}";
 
   std::error_code ec;
   if (!output_path.parent_path().empty()) {
