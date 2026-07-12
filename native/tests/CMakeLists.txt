@@ -153,6 +153,17 @@ lacr_apply_strict_fp(candidate_lookup_test)
 add_test(NAME candidate_lookup_test COMMAND candidate_lookup_test)
 set_tests_properties(candidate_lookup_test PROPERTIES LABELS native-integration)
 
+add_executable(recognizer_session_test integration/recognizer_session_test.cpp)
+target_link_libraries(recognizer_session_test PRIVATE local_acr_core)
+target_include_directories(recognizer_session_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(recognizer_session_test PRIVATE cxx_std_20)
+lacr_apply_warnings(recognizer_session_test)
+lacr_apply_sanitizers(recognizer_session_test)
+lacr_apply_strict_fp(recognizer_session_test)
+
+add_test(NAME recognizer_session_test COMMAND recognizer_session_test)
+set_tests_properties(recognizer_session_test PROPERTIES LABELS native-integration)
+
 if(APPLE)
   find_library(LACR_SYSTEM_SQLITE_LIBRARY sqlite3)
   if(LACR_SYSTEM_SQLITE_LIBRARY)

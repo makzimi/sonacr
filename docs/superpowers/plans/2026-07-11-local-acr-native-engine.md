@@ -516,27 +516,27 @@ Commit: `feat: apply conservative recognition gates`
 - Consumes: prepared database, session generation, and PCM batches.
 - Produces: bounded native recognition/error events and deterministic session state transitions.
 
-- [ ] **Step 1: Add failing rolling-window and reset tests**
+- [x] **Step 1: Add failing rolling-window and reset tests**
 
 Cover evaluation beginning at two seconds, 22-hop cadence, four-second expiry, 512-query cap, query-density error/reset, two consecutive evaluations, generation tagging, and full DSP/matcher/timeline reset after stop or discontinuity. Cooldown is deliberately excluded here because the KMP controller starts it when the main-thread callback is delivered.
 
-- [ ] **Step 2: Run focused red integration tests**
+- [x] **Step 2: Run focused red integration tests**
 
 Expected: missing `Recognizer` and event types.
 
-- [ ] **Step 3: Implement one-worker session ownership**
+- [x] **Step 3: Implement one-worker session ownership**
 
 Keep resampler/fingerprinter/matcher/database mutable state on one worker. Incrementally expire query landmarks, evaluate on the exact cadence, attach generation/source-frame values to events, and reset all session state on stop or typed failure.
 
-- [ ] **Step 4: Implement typed event production**
+- [x] **Step 4: Implement typed event production**
 
 Emit bounded recognition and terminal session-error records containing the active generation and newest analyzed source-frame index. Do not suppress duplicate trigger events in native code; checkpoint 15 owns delivery-time cooldown in common KMP code.
 
-- [ ] **Step 5: Run injected end-to-end and soak tests**
+- [x] **Step 5: Run injected end-to-end and soak tests**
 
 Use a small generated database and deterministic PCM to verify correct match/no-match/error events, matched position, arbitrary chunking, and constant memory during a 30-minute faster-than-real-time stream.
 
-- [ ] **Step 6: Commit checkpoint 10**
+- [x] **Step 6: Commit checkpoint 10**
 
 Commit: `feat: run bounded recognition sessions`
 

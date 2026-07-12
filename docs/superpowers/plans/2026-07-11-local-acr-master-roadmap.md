@@ -34,7 +34,7 @@ For every checkpoint:
 | 7 | Database core | Hidden vendored SQLite schema, canonical metadata/digest, integrity checks, resource bounds, and read-only ownership. | 6 | `feat: persist validated fingerprint databases` | committed |
 | 8 | Candidate alignment | Bounded indexed lookup, unique query voting, floor-quantized offsets, and disjoint secondary aggregates. | 7 | `feat: align fingerprint candidates` | committed |
 | 9 | Recognition gates | Conservative evidence/separation/stability gates, confidence, ambiguity rejection, and matched position. | 8 | `feat: apply conservative recognition gates` | committed |
-| 10 | Streaming engine | Four-second rolling recognition, evaluation schedule, reset, typed events, and injected-PCM tests. | 9 | `feat: run bounded recognition sessions` | planned |
+| 10 | Streaming engine | Four-second rolling recognition, evaluation schedule, reset, typed events, and injected-PCM tests. | 9 | `feat: run bounded recognition sessions` | committed |
 | 11 | Native C ABI | Opaque handles, SPSC queue, push/poll API, session generations, exception containment, and quiescent destruction. | 10 | `feat: expose safe native recognition ABI` | planned |
 | 12 | CLI input pipeline | Strict manifest parser and bounded no-shell FFprobe/FFmpeg streaming decoder. | 6 | `feat: decode validated CLI audio inputs` | planned |
 | 13 | Database commands | Durable build, inspect, verify, and frozen-toolchain `verify --release` commands. | 7, 12 | `feat: build and verify local ACR databases` | planned |
@@ -77,7 +77,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 7 | `feat: persist validated fingerprint databases` | SQLite archive digest verified; compile options and Apple system-SQLite coexistence asserted; schema golden, semantic digest, profile/digest/FK corruption, posting bounds, read-only connection, Debug, ASan/UBSan, and TSan suites passed. |
 | 8 | `feat: align fingerprint candidates` | Repeated-hash vote deduplication, negative floor offsets, 256-hash SQL chunks, expansion cutoff, per-trigger isolation, disjoint secondary centers, Debug, ASan/UBSan, and TSan suites passed. |
 | 9 | `feat: apply conservative recognition gates` | Conservative-v1 evidence, coverage, margin, runner-up ratio, consecutive winner, offset stability, ambiguity, confidence, matched-position boundaries, Debug, ASan/UBSan, and TSan suites passed. |
-| 10–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 10 | `feat: run bounded recognition sessions` | Injected PCM recognition, generation-tagged events, session restart/reset, query-density terminal error, Debug, ASan/UBSan, and TSan suites passed. |
+| 11–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 

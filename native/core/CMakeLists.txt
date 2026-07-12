@@ -100,6 +100,7 @@ target_sources(
     src/matcher/candidate_lookup.cpp
     src/matcher/conservative_matcher.cpp
     src/matcher/offset_accumulator.cpp
+    src/session/recognizer.cpp
     src/audio/speex_resampler.cpp
     src/support/sha256.cpp
     src/support/version.cpp
