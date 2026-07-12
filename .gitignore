@@ -1,7 +1,10 @@
 .DS_Store
 .superpowers/
+.codex/
+.agents/
 .gradle/
 .idea/
+build/
 **/build/
 local.properties
 *.iml
@@ -9,4 +12,15 @@ local.properties
 xcuserdata/
 DerivedData/
 .kotlin/
+.cxx/
+.externalNativeBuild/
+.swiftpm/
+*.xcuserdatad/
+*.hprof
+*.log
+*.tmp
+__pycache__/
+*.py[cod]
 
+# Reference projects supplied for analysis only. Do not publish or package.
+examples/
