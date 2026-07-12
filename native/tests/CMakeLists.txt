@@ -109,6 +109,17 @@ lacr_apply_strict_fp(offset_accumulator_test)
 add_test(NAME offset_accumulator_test COMMAND offset_accumulator_test)
 set_tests_properties(offset_accumulator_test PROPERTIES LABELS native-unit)
 
+add_executable(conservative_matcher_test unit/conservative_matcher_test.cpp)
+target_link_libraries(conservative_matcher_test PRIVATE local_acr_core)
+target_include_directories(conservative_matcher_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(conservative_matcher_test PRIVATE cxx_std_20)
+lacr_apply_warnings(conservative_matcher_test)
+lacr_apply_sanitizers(conservative_matcher_test)
+lacr_apply_strict_fp(conservative_matcher_test)
+
+add_test(NAME conservative_matcher_test COMMAND conservative_matcher_test)
+set_tests_properties(conservative_matcher_test PROPERTIES LABELS native-unit)
+
 add_executable(fingerprinter_test integration/fingerprinter_test.cpp)
 target_link_libraries(fingerprinter_test PRIVATE local_acr_core)
 target_include_directories(fingerprinter_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")

@@ -480,27 +480,27 @@ Commit: `feat: align fingerprint candidates`
 - Consumes: current and previous evaluation candidates plus newest analyzed source-frame mapping.
 - Produces: optional `NativeRecognitionResult` with trigger ID, confidence, matched cue frame, newest source frame, and diagnostic evidence.
 
-- [ ] **Step 1: Add failing acceptance-boundary tests**
+- [x] **Step 1: Add failing acceptance-boundary tests**
 
 Cover aligned count 11/12, ratio below/at 12%, winner margin 4/5, runner-up ratio below/at 1.25, zero runner-up, secondary-offset 80% ambiguity, consecutive-winner requirement, one/two-bucket offset movement, deterministic trigger-ID tie, confidence endpoints, and out-of-range cue position rejection.
 
-- [ ] **Step 2: Run focused red tests**
+- [x] **Step 2: Run focused red tests**
 
 Expected: compile failure because `ConservativeMatcher` is absent.
 
-- [ ] **Step 3: Implement the frozen profile data and gates**
+- [x] **Step 3: Implement the frozen profile data and gates**
 
 Represent the six public gates and internal 80% ambiguity threshold as immutable profile data named `conservative-v1`. Evaluate ambiguity, evidence, ratio, margin, runner-up ratio, consecutive trigger, and offset stability in a fixed order with diagnostics.
 
-- [ ] **Step 4: Implement confidence and position**
+- [x] **Step 4: Implement confidence and position**
 
 Compute the exact evidence/coverage/separation weighted formula from Section 7.5. Map newest analyzed session time through the winning offset, reject out-of-range values, and return source-frame values required for KMP `resultAgeMs`.
 
-- [ ] **Step 5: Run all matcher tests**
+- [x] **Step 5: Run all matcher tests**
 
 Expected: every just-below boundary rejects and every exact boundary accepts only when all other gates hold.
 
-- [ ] **Step 6: Commit checkpoint 9**
+- [x] **Step 6: Commit checkpoint 9**
 
 Commit: `feat: apply conservative recognition gates`
 
