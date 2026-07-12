@@ -1,0 +1,5 @@
+package = com.localacr.iosbridge
+language = Objective-C
+headers = local_acr_ios_bridge.h local_acr/local_acr.h
+headerFilter = local_acr_ios_bridge.h local_acr/local_acr.h
+linkerOpts = -framework AVFoundation -framework Foundation

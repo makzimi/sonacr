@@ -23,6 +23,10 @@ endif()
 
 add_subdirectory(native/core)
 
+if(APPLE)
+  add_subdirectory(native/ios)
+endif()
+
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS" AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android")
   add_subdirectory(native/cli)
 endif()

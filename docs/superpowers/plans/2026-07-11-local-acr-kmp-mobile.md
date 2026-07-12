@@ -151,10 +151,10 @@ Commit: `feat: add shared Local ACR lifecycle API`
 - Consumes: checkpoint 15 shared ports and native C ABI.
 - Produces: iOS capture bridge that never executes Kotlin on the audio tap.
 
-- [ ] Add failing cinterop/Swift compile contract test.
-- [ ] Implement Objective-C++ `AVAudioEngine` bridge and cinterop wrapper.
-- [ ] Verify iOS simulator build and native suites.
-- [ ] Commit: `feat: add iOS microphone capture bridge`
+- [x] Add failing cinterop/Swift compile contract test.
+- [x] Implement Objective-C++ `AVAudioEngine` bridge and cinterop wrapper.
+- [x] Verify iOS simulator build and native suites.
+- [x] Commit: `feat: add iOS microphone capture bridge`
 
 ## Checkpoint 19: iOS demo
 

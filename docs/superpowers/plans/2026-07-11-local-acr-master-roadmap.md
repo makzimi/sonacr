@@ -42,7 +42,7 @@ For every checkpoint:
 | 15 | KMP lifecycle API | Public types, typed errors, factory, prepare/start/stop/close, main-thread delivery, cooldown, and race tests. | 11 | `feat: add shared Local ACR lifecycle API` | committed |
 | 16 | Android capture | JNI direct-buffer binding and bounded `AudioRecord` capture with permission, discontinuity, and shutdown handling. | 15 | `feat: add Android microphone capture` | committed |
 | 17 | Android demo | API 26 Compose permission/listening/promotion flow using a bundled generated database. | 13, 14, 16 | `feat: add Android Local ACR demo` | committed |
-| 18 | iOS capture | Objective-C++ `AVAudioEngine` bridge and Kotlin/Native integration without Kotlin on the audio tap. | 15 | `feat: add iOS microphone capture bridge` | planned |
+| 18 | iOS capture | Objective-C++ `AVAudioEngine` bridge and Kotlin/Native integration without Kotlin on the audio tap. | 15 | `feat: add iOS microphone capture bridge` | committed |
 | 19 | iOS demo | iOS 15 SwiftUI permission/listening/promotion flow using the same database. | 13, 14, 18 | `feat: add iOS Local ACR demo` | planned |
 | 20 | Parity and native safety | Cross-target goldens, Swift ABI gate, malformed-input properties, fuzzing, sanitizers, and nominal soak. | 11, 16, 18 | `test: enforce native parity and safety` | planned |
 | 21 | Quality qualification | Preregistered corpus runners, statistical gates, latency/startup/memory benchmarks, and device evidence. | 17, 19, 20 | `test: qualify Local ACR recognition profile` | planned |
@@ -85,7 +85,8 @@ This just-in-time expansion keeps later implementation details aligned with the 
 | 15 | `feat: add shared Local ACR lifecycle API` | KMP shared JVM lifecycle tests passed via checked-in Gradle wrapper; factory validation, prepare/start/stop/close, main-dispatch, cooldown, stale delivery suppression, runtime error, invalid-state tests covered; native Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator core build passed. |
 | 16 | `feat: add Android microphone capture` | Android shared `testDebugUnitTest`, `jvmTest`, and `assembleDebug` passed with rerun-tasks; direct ByteBuffer JNI bridge, AudioRecord direct-buffer capture, source-frame continuity, MIC fallback, and native-event mapping covered; native Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator core build passed. |
 | 17 | `feat: add Android Local ACR demo` | Android demo `testDebugUnitTest`, `assembleDebug`, shared `testDebugUnitTest`, and shared `jvmTest` passed with rerun-tasks; permission/listening/promotion/cooldown/local-CTA/observable-state controller tests and unavailable-JNI typed failure covered; generated `venue-demo.lacrdb` inspected as 1 trigger / 74 fingerprints; native Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator core build passed. |
-| 18–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
+| 18 | `feat: add iOS microphone capture bridge` | Kotlin/Native iOS simulator framework link, Swift bridge header typecheck, Android/shared regressions, native Debug 26/26, ASan/UBSan 26/26, TSan 26/26, and iOS simulator `local_acr_ios_bridge`/`local_acr_core` build passed; Objective-C++ tap pushes PCM directly to native C ABI without Kotlin callback on the audio tap. |
+| 19–22 | Pending checkpoint execution | Populated immediately after each checkpoint commit. |
 
 ## Decisions
 
