@@ -1,0 +1,386 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01A000000000000000000101 /* LocalAcrDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A000000000000000000201 /* LocalAcrDemoApp.swift */; };
+		01A000000000000000000102 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A000000000000000000202 /* ContentView.swift */; };
+		01A000000000000000000103 /* DemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A000000000000000000203 /* DemoController.swift */; };
+		01A000000000000000000104 /* SharedDemoRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A000000000000000000204 /* SharedDemoRecognizer.swift */; };
+		01A000000000000000000105 /* venue-demo.lacrdb in Resources */ = {isa = PBXBuildFile; fileRef = 01A000000000000000000205 /* venue-demo.lacrdb */; };
+		01A000000000000000000106 /* LocalAcrShared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A000000000000000000206 /* LocalAcrShared.framework */; };
+		01A000000000000000000107 /* LocalAcrShared.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 01A000000000000000000206 /* LocalAcrShared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		01A000000000000000000108 /* DemoControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A000000000000000000207 /* DemoControllerTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		01A000000000000000000301 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01A000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01A000000000000000000401;
+			remoteInfo = LocalAcrDemo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		01A000000000000000000501 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				01A000000000000000000107 /* LocalAcrShared.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		01A000000000000000000201 /* LocalAcrDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAcrDemoApp.swift; sourceTree = "<group>"; };
+		01A000000000000000000202 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		01A000000000000000000203 /* DemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoController.swift; sourceTree = "<group>"; };
+		01A000000000000000000204 /* SharedDemoRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedDemoRecognizer.swift; sourceTree = "<group>"; };
+		01A000000000000000000205 /* venue-demo.lacrdb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "venue-demo.lacrdb"; sourceTree = "<group>"; };
+		01A000000000000000000206 /* LocalAcrShared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAcrShared.framework; path = "../shared/build/bin/iosSimulatorArm64/debugFramework/LocalAcrShared.framework"; sourceTree = SOURCE_ROOT; };
+		01A000000000000000000207 /* DemoControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoControllerTests.swift; sourceTree = "<group>"; };
+		01A000000000000000000402 /* LocalAcrDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocalAcrDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		01A000000000000000000403 /* LocalAcrDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocalAcrDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		01A000000000000000000601 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A000000000000000000106 /* LocalAcrShared.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01A000000000000000000602 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		01A000000000000000000701 = {
+			isa = PBXGroup;
+			children = (
+				01A000000000000000000801 /* LocalAcrDemo */,
+				01A000000000000000000802 /* LocalAcrDemoTests */,
+				01A000000000000000000803 /* Resources */,
+				01A000000000000000000804 /* Frameworks */,
+				01A000000000000000000805 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		01A000000000000000000801 /* LocalAcrDemo */ = {
+			isa = PBXGroup;
+			children = (
+				01A000000000000000000201 /* LocalAcrDemoApp.swift */,
+				01A000000000000000000202 /* ContentView.swift */,
+				01A000000000000000000203 /* DemoController.swift */,
+				01A000000000000000000204 /* SharedDemoRecognizer.swift */,
+			);
+			path = LocalAcrDemo;
+			sourceTree = "<group>";
+		};
+		01A000000000000000000802 /* LocalAcrDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				01A000000000000000000207 /* DemoControllerTests.swift */,
+			);
+			path = LocalAcrDemoTests;
+			sourceTree = "<group>";
+		};
+		01A000000000000000000803 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				01A000000000000000000205 /* venue-demo.lacrdb */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		01A000000000000000000804 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				01A000000000000000000206 /* LocalAcrShared.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		01A000000000000000000805 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				01A000000000000000000402 /* LocalAcrDemo.app */,
+				01A000000000000000000403 /* LocalAcrDemoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		01A000000000000000000401 /* LocalAcrDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01A000000000000000000901 /* Build configuration list for PBXNativeTarget "LocalAcrDemo" */;
+			buildPhases = (
+				01A000000000000000000A01 /* Sources */,
+				01A000000000000000000B01 /* Resources */,
+				01A000000000000000000601 /* Frameworks */,
+				01A000000000000000000501 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LocalAcrDemo;
+			productName = LocalAcrDemo;
+			productReference = 01A000000000000000000402 /* LocalAcrDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		01A000000000000000000404 /* LocalAcrDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01A000000000000000000902 /* Build configuration list for PBXNativeTarget "LocalAcrDemoTests" */;
+			buildPhases = (
+				01A000000000000000000A02 /* Sources */,
+				01A000000000000000000B02 /* Resources */,
+				01A000000000000000000602 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				01A000000000000000000302 /* PBXTargetDependency */,
+			);
+			name = LocalAcrDemoTests;
+			productName = LocalAcrDemoTests;
+			productReference = 01A000000000000000000403 /* LocalAcrDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		01A000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					01A000000000000000000401 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					01A000000000000000000404 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 01A000000000000000000401;
+					};
+				};
+			};
+			buildConfigurationList = 01A000000000000000000900 /* Build configuration list for PBXProject "LocalAcrDemo" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 01A000000000000000000701;
+			productRefGroup = 01A000000000000000000805 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				01A000000000000000000401 /* LocalAcrDemo */,
+				01A000000000000000000404 /* LocalAcrDemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		01A000000000000000000B01 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A000000000000000000105 /* venue-demo.lacrdb in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01A000000000000000000B02 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		01A000000000000000000A01 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A000000000000000000101 /* LocalAcrDemoApp.swift in Sources */,
+				01A000000000000000000102 /* ContentView.swift in Sources */,
+				01A000000000000000000103 /* DemoController.swift in Sources */,
+				01A000000000000000000104 /* SharedDemoRecognizer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01A000000000000000000A02 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A000000000000000000108 /* DemoControllerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		01A000000000000000000302 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01A000000000000000000401 /* LocalAcrDemo */;
+			targetProxy = 01A000000000000000000301 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		01A000000000000000000C01 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1 $(inherited)";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		01A000000000000000000C02 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Local ACR listens on-device to detect local venue cues.";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.localacr.demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		01A000000000000000000C03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.localacr.demo.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LocalAcrDemo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LocalAcrDemo";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		01A000000000000000000900 /* Build configuration list for PBXProject "LocalAcrDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01A000000000000000000C01 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		01A000000000000000000901 /* Build configuration list for PBXNativeTarget "LocalAcrDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01A000000000000000000C02 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		01A000000000000000000902 /* Build configuration list for PBXNativeTarget "LocalAcrDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01A000000000000000000C03 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 01A000000000000000000001 /* Project object */;
+}

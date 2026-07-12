@@ -167,10 +167,10 @@ Commit: `feat: add shared Local ACR lifecycle API`
 - Consumes: checkpoint 18 iOS shared SDK framework.
 - Produces: SwiftUI permission/listening/promotion demo.
 
-- [ ] Add failing SwiftUI/XCTest coverage for permission, listening state, recognized promotion, cooldown, and local CTA.
-- [ ] Implement SwiftUI demo without network/ad/analytics dependencies.
-- [ ] Verify iOS simulator build/tests plus native suites.
-- [ ] Commit: `feat: add iOS Local ACR demo`
+- [x] Add failing SwiftUI/XCTest coverage for permission, listening state, recognized promotion, cooldown, and local CTA.
+- [x] Implement SwiftUI demo without network/ad/analytics dependencies.
+- [x] Verify iOS simulator build/tests plus native suites.
+- [x] Commit: `feat: add iOS Local ACR demo`
 
 ## Self-Review
 
