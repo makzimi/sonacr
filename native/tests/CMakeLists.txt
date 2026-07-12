@@ -109,6 +109,38 @@ lacr_apply_strict_fp(fingerprinter_test)
 add_test(NAME fingerprinter_test COMMAND fingerprinter_test)
 set_tests_properties(fingerprinter_test PROPERTIES LABELS native-integration)
 
+add_executable(database_test integration/database_test.cpp)
+target_link_libraries(database_test PRIVATE local_acr_core)
+target_include_directories(database_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+target_compile_features(database_test PRIVATE cxx_std_20)
+lacr_apply_warnings(database_test)
+lacr_apply_sanitizers(database_test)
+lacr_apply_strict_fp(database_test)
+
+add_test(NAME database_test COMMAND database_test)
+set_tests_properties(database_test PROPERTIES LABELS native-integration)
+
+if(APPLE)
+  find_library(LACR_SYSTEM_SQLITE_LIBRARY sqlite3)
+  if(LACR_SYSTEM_SQLITE_LIBRARY)
+    add_executable(sqlite_symbol_isolation_test integration/sqlite_symbol_isolation_test.cpp)
+    target_link_libraries(
+      sqlite_symbol_isolation_test
+      PRIVATE
+        local_acr_core
+        "${LACR_SYSTEM_SQLITE_LIBRARY}"
+    )
+    target_include_directories(sqlite_symbol_isolation_test PRIVATE "${PROJECT_SOURCE_DIR}/native/core/src")
+    target_compile_features(sqlite_symbol_isolation_test PRIVATE cxx_std_20)
+    lacr_apply_warnings(sqlite_symbol_isolation_test)
+    lacr_apply_sanitizers(sqlite_symbol_isolation_test)
+    lacr_apply_strict_fp(sqlite_symbol_isolation_test)
+
+    add_test(NAME sqlite_symbol_isolation_test COMMAND sqlite_symbol_isolation_test)
+    set_tests_properties(sqlite_symbol_isolation_test PROPERTIES LABELS native-integration)
+  endif()
+endif()
+
 add_test(
   NAME dependency_digest_test
   COMMAND

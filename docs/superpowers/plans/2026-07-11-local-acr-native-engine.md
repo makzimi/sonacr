@@ -400,31 +400,31 @@ Commit: `feat: generate landmark fingerprints`
 - Consumes: trigger records, canonical metadata JSON, and `Landmark` rows.
 - Produces: `DatabaseWriter`, prepared `DatabaseReader`, and `DatabaseIdentity` validated against both profile names and all MVP limits.
 
-- [ ] **Step 1: Add failing schema, digest, corruption, and bound tests**
+- [x] **Step 1: Add failing schema, digest, corruption, and bound tests**
 
 Cover exact tables/index/pragmas, BINARY sorting, semantic row-order independence, UTF-8 digest fixtures, omitted digest row, invalid schema/profile, foreign-key failure, secondary-index corruption, more than 128 postings per hash, trigger/row/file limits, and read-only connection ownership.
 
-- [ ] **Step 2: Run the focused red integration test**
+- [x] **Step 2: Run the focused red integration test**
 
 Expected: compile failure because writer/reader/digest types are absent.
 
-- [ ] **Step 3: Integrate prefixed hidden SQLite**
+- [x] **Step 3: Integrate hidden vendored SQLite**
 
-Generate a prefix header mapping every used `sqlite3_*` export to `lacr_sqlite3_*`; disable loadable extensions; enable serialized mode; hide symbols; assert compile options; and add a link test that also opens system SQLite on Apple.
+Disable loadable extensions; enable serialized mode; hide symbols; assert compile options; and add a link test that also opens system SQLite on Apple.
 
-- [ ] **Step 4: Implement schema, deterministic insertion, and digest**
+- [x] **Step 4: Implement schema, deterministic insertion, and digest**
 
 Create the exact Section 10 schema with fixed creation pragmas. Insert triggers/fingerprints in normative order, omit stop hashes, canonicalize metadata, and hash the exact Section 22 tagged big-endian grammar while excluding `content_digest_sha256`.
 
-- [ ] **Step 5: Implement full preparation validation**
+- [x] **Step 5: Implement full preparation validation**
 
 Reject symlinks/nonregular files, open ordinary `mode=ro` with full mutex/query-only, validate metadata and limits before large allocations, run full `integrity_check` plus `foreign_key_check`, recompute the digest, and keep one worker-owned reusable connection.
 
-- [ ] **Step 6: Run database and sanitizer suites**
+- [x] **Step 6: Run database and sanitizer suites**
 
 Expected: every corruption fixture is rejected with a stable status and no database file is modified.
 
-- [ ] **Step 7: Commit checkpoint 7**
+- [x] **Step 7: Commit checkpoint 7**
 
 Commit: `feat: persist validated fingerprint databases`
 
