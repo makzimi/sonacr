@@ -4,15 +4,9 @@ Sonacr recognizes songs on a phone from a few seconds of microphone audio. It wo
 
 > **Work in progress.** The Android sample app works on a real phone. The APIs, the database format and the recognition thresholds can still change, and the iOS app does not recognize audio yet. Do not use this in production.
 
-## Demo
+## Current working state
 
-<!--
-  VIDEO PLACEHOLDER
-  To add the demo video, open README.md on github.com, click "Edit", and drag the .mp4 file onto this spot.
-  GitHub uploads it and inserts a link that plays inline. Then delete this comment and the line below.
--->
-
-_Video coming soon. It shows the Android sample app naming a song that plays from a laptop speaker._
+https://github.com/user-attachments/assets/cc972c2d-46cf-45d7-a311-68c8c5f0a895
 
 ## How it works
 
@@ -101,22 +95,6 @@ Run the tests:
 ctest --preset macos-clang-debug
 ./gradlew :shared:testDebugUnitTest :androidApp:testDebugUnitTest
 ```
-
-## Repository layout
-
-| Path | Contents |
-|---|---|
-| `native/core` | The C++ engine: resampling, spectrum, peaks, fingerprints, database, matcher and the C API |
-| `native/cli` | `local_acr_db`, which builds, inspects and verifies `.lacrdb` databases |
-| `native/android`, `native/ios` | Platform bridges to the C API |
-| `shared` | Kotlin Multiplatform SDK and microphone capture |
-| `androidApp`, `iosApp` | Sample apps |
-| `tools/bench`, `tools/probe`, `tools/demo` | Benchmark, C API test client and the demo database builder |
-| `docs` | Architecture, roadmap and measured results |
-
-## Privacy
-
-The SDK keeps microphone audio in memory only while it computes fingerprints. It never saves, uploads or logs the audio, and it makes no network requests.
 
 ## License
 
