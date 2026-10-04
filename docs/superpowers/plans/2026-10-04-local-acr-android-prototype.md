@@ -24,7 +24,7 @@ The master roadmap marks all 22 checkpoints `committed`, but analysis showed the
 | Demo shows promotions for one synthetic cue | `venue-demo.lacrdb` = 1 trigger / 74 fingerprints; asset copy never refreshes a stale file. |
 | Qualification numbers are fabricated | `run_fixture_trials` sets `recognized = (kind == Positive)` and computes latency from a formula. |
 
-Scope: engine fixes + desktop benchmark + Android prototype on the connected Pixel 7 (`33131FDH20039E`, Android 16, arm64-v8a). iOS is deliberately out of scope — see "Follow-up plan: iOS" at the end.
+Scope: engine fixes + desktop benchmark + Android prototype on the connected Pixel 7 (`<device-serial>`, Android 16, arm64-v8a). iOS is deliberately out of scope — see "Follow-up plan: iOS" at the end.
 
 ## Global Constraints
 
@@ -1240,10 +1240,10 @@ If the NDK compiler reports a warning-as-error in core code, fix the warning in 
 - [ ] **Step 7: Device smoke (old demo DB still bundled)**
 
 ```bash
-adb -s 33131FDH20039E install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
-adb -s 33131FDH20039E shell pm grant com.localacr.demo android.permission.RECORD_AUDIO
-adb -s 33131FDH20039E shell am start -n com.localacr.demo/.MainActivity
-adb -s 33131FDH20039E logcat -d -s AndroidRuntime:E | tail -20
+adb -s <device-serial> install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
+adb -s <device-serial> shell pm grant com.localacr.demo android.permission.RECORD_AUDIO
+adb -s <device-serial> shell am start -n com.localacr.demo/.MainActivity
+adb -s <device-serial> logcat -d -s AndroidRuntime:E | tail -20
 ```
 Expected: screen shows `Status: Listening` (not `Recognition error: native recognizer create failed`); no `UnsatisfiedLinkError` in logcat.
 
@@ -1974,8 +1974,8 @@ git commit -m "feat: show now-playing track in the Android demo"
 
 ```bash
 ./gradlew :androidApp:installDebug
-adb -s 33131FDH20039E shell pm grant com.localacr.demo android.permission.RECORD_AUDIO
-adb -s 33131FDH20039E shell am start -n com.localacr.demo/.MainActivity
+adb -s <device-serial> shell pm grant com.localacr.demo android.permission.RECORD_AUDIO
+adb -s <device-serial> shell am start -n com.localacr.demo/.MainActivity
 ```
 Expected: `Status: Listening`.
 
@@ -1996,7 +1996,7 @@ Play `local-tracks/negative.mp3` for 10 minutes at the same volume. Pass: no car
 
 - [ ] **Step 4: If it fails on device but passed Task 5**
 
-1. `adb -s 33131FDH20039E logcat -d -s AndroidRuntime:E` — crashes first.
+1. `adb -s <device-serial> logcat -d -s AndroidRuntime:E` — crashes first.
 2. Try a different capture source: in `shared/src/androidMain/kotlin/com/localacr/android/AudioRecordCapture.kt` (`AndroidAudioRouting.preferredAudioSource`), switch to `MediaRecorder.AudioSource.VOICE_RECOGNITION` (less AGC/noise suppression than `MIC`), rebuild, repeat Step 2.
 3. Reproduce the device conditions on desktop: record 10 s with the phone's mic (e.g., Recorder app), copy to the laptop, and run it through the probe:
    ```bash
