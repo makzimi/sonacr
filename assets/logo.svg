@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Sonacr logo</title>
+  <desc id="desc">Five audio spectrum bars with two peaks connected as a fingerprint pair.</desc>
+  <rect width="512" height="512" rx="112" fill="#101D2B"/>
+  <g transform="translate(256 256) scale(1.25) translate(-256 -256)">
+    <g fill="none" stroke="#A9E8E0" stroke-width="26" stroke-linecap="round">
+      <path d="M142 229v54M199 181v150M256 149v214M313 211v90M370 231v50"/>
+    </g>
+    <path d="M199 181 313 211" fill="none" stroke="#36E0B7" stroke-width="14" stroke-linecap="round"/>
+    <g fill="#36E0B7">
+      <circle cx="199" cy="181" r="19"/>
+      <circle cx="313" cy="211" r="19"/>
+    </g>
+  </g>
+</svg>
