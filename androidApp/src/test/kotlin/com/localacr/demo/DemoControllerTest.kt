@@ -24,11 +24,24 @@ class DemoControllerTest {
     }
 
     @Test
-    fun preparesAndStartsWhenPermissionGranted() {
+    fun opensIdleWithoutListeningWhenPermissionGranted() {
         val sdk = FakeDemoSdk()
         val controller = DemoController(sdk, catalog)
 
         controller.onScreenVisible(permissionGranted = true)
+
+        assertEquals(DemoListeningStatus.Idle, controller.state.status)
+        assertFalse(sdk.prepared)
+        assertFalse(sdk.started)
+    }
+
+    @Test
+    fun startPreparesAndStartsWhenPermissionGranted() {
+        val sdk = FakeDemoSdk()
+        val controller = DemoController(sdk, catalog)
+        controller.onScreenVisible(permissionGranted = true)
+
+        controller.onStartListening(permissionGranted = true)
 
         assertEquals(DemoListeningStatus.Listening, controller.state.status)
         assertTrue(sdk.prepared)
@@ -36,10 +49,74 @@ class DemoControllerTest {
     }
 
     @Test
+    fun startWithoutPermissionAsksForPermissionInsteadOfListening() {
+        val sdk = FakeDemoSdk()
+        val controller = DemoController(sdk, catalog)
+
+        controller.onStartListening(permissionGranted = false)
+
+        assertEquals(DemoListeningStatus.PermissionRequired, controller.state.status)
+        assertFalse(sdk.started)
+    }
+
+    @Test
+    fun stopStopsListeningAndReturnsToIdle() {
+        val sdk = FakeDemoSdk()
+        val controller = DemoController(sdk, catalog)
+        controller.onStartListening(permissionGranted = true)
+
+        controller.onStopListening()
+
+        assertTrue(sdk.stopped)
+        assertEquals(DemoListeningStatus.Idle, controller.state.status)
+    }
+
+    @Test
+    fun startAfterStopListensAgainAndClearsThePreviousTrack() {
+        val sdk = FakeDemoSdk()
+        val controller = DemoController(sdk, catalog)
+        controller.onStartListening(permissionGranted = true)
+        controller.onRecognized(result("track-a"))
+        controller.onStopListening()
+
+        controller.onStartListening(permissionGranted = true)
+
+        assertEquals(2, sdk.startCount)
+        assertEquals(DemoListeningStatus.Listening, controller.state.status)
+        assertNull(controller.state.nowPlaying)
+    }
+
+    @Test
+    fun recognitionArrivingAfterStopIsIgnored() {
+        val controller = DemoController(FakeDemoSdk(), catalog)
+        controller.onStartListening(permissionGranted = true)
+        controller.onStopListening()
+
+        controller.onRecognized(result("track-a"))
+
+        assertEquals(DemoListeningStatus.Idle, controller.state.status)
+        assertNull(controller.state.nowPlaying)
+    }
+
+    @Test
+    fun errorArrivingAfterStopIsIgnored() {
+        val sdk = FakeDemoSdk()
+        val controller = DemoController(sdk, catalog)
+        controller.onStartListening(permissionGranted = true)
+        controller.onStopListening()
+
+        controller.onError(error("late failure"))
+
+        assertEquals(1, sdk.startCount)
+        assertEquals(DemoListeningStatus.Idle, controller.state.status)
+        assertNull(controller.state.errorMessage)
+    }
+
+    @Test
     fun recognitionShowsNowPlayingFromCatalog() {
         val states = mutableListOf<DemoState>()
         val controller = DemoController(FakeDemoSdk(), catalog, onStateChanged = { states += it })
-        controller.onScreenVisible(permissionGranted = true)
+        controller.onStartListening(permissionGranted = true)
 
         controller.onRecognized(result("track-a"))
 
@@ -53,7 +130,7 @@ class DemoControllerTest {
     @Test
     fun unknownTriggerFallsBackToTriggerId() {
         val controller = DemoController(FakeDemoSdk(), catalog)
-        controller.onScreenVisible(permissionGranted = true)
+        controller.onStartListening(permissionGranted = true)
 
         controller.onRecognized(result("unlisted"))
 
@@ -63,7 +140,7 @@ class DemoControllerTest {
     @Test
     fun differentTrackReplacesNowPlaying() {
         val controller = DemoController(FakeDemoSdk(), catalog)
-        controller.onScreenVisible(permissionGranted = true)
+        controller.onStartListening(permissionGranted = true)
 
         controller.onRecognized(result("track-a"))
         controller.onRecognized(result("track-b"))
@@ -75,7 +152,7 @@ class DemoControllerTest {
     fun screenDisappearStopsListening() {
         val sdk = FakeDemoSdk()
         val controller = DemoController(sdk, catalog)
-        controller.onScreenVisible(permissionGranted = true)
+        controller.onStartListening(permissionGranted = true)
 
         controller.onScreenHidden()
 
@@ -87,7 +164,7 @@ class DemoControllerTest {
     fun runtimeErrorRestartsListeningAutomatically() {
         val sdk = FakeDemoSdk()
         val controller = DemoController(sdk, catalog)
-        controller.onScreenVisible(permissionGranted = true)
+        controller.onStartListening(permissionGranted = true)
 
         controller.onError(error("transient"))
 
@@ -100,7 +177,7 @@ class DemoControllerTest {
     fun repeatedErrorsWithoutRecognitionAreDisplayed() {
         val sdk = FakeDemoSdk()
         val controller = DemoController(sdk, catalog)
-        controller.onScreenVisible(permissionGranted = true)
+        controller.onStartListening(permissionGranted = true)
 
         repeat(4) { controller.onError(error("broken")) }
 
@@ -113,7 +190,7 @@ class DemoControllerTest {
     fun asyncStartFailuresAfterSynchronousSuccessAreDisplayedAfterCap() {
         val sdk = FakeDemoSdk()
         val controller = DemoController(sdk, catalog)
-        controller.onScreenVisible(permissionGranted = true)
+        controller.onStartListening(permissionGranted = true)
 
         repeat(4) { controller.onError(error("microphone busy")) }
 
@@ -125,7 +202,7 @@ class DemoControllerTest {
     fun asyncPrepareFailureIsDisplayedInsteadOfFakeListening() {
         val sdk = FakeDemoSdk()
         val controller = DemoController(sdk, catalog)
-        controller.onScreenVisible(permissionGranted = true)
+        controller.onStartListening(permissionGranted = true)
         sdk.startFailure = "database invalid"
 
         controller.onError(error("database invalid"))

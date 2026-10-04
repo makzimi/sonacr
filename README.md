@@ -1,3 +1,5 @@
+<img src="assets/logo.svg" alt="Sonacr logo" width="96" height="96">
+
 # Sonacr
 
 Sonacr recognizes songs on a phone from a few seconds of microphone audio. It works like Shazam, except that the fingerprint database ships inside the app and nothing goes to a server.
@@ -73,7 +75,7 @@ export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
 ./gradlew :androidApp:installDebug
 ```
 
-Open "Local ACR" on the phone, allow the microphone, and play one of your songs nearby.
+Open "Local ACR" on the phone and tap "Start listening". Allow the microphone the first time, then play one of your songs nearby. Tap "Stop listening" to release the microphone.
 
 ## Measure recognition on your computer
 

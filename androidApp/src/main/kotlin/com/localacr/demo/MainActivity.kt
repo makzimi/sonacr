@@ -81,10 +81,14 @@ fun LocalAcrDemoApp() {
         ActivityResultContracts.RequestPermission(),
     ) { granted ->
         permissionGranted = granted
-        controller.onScreenVisible(granted)
+        if (granted) {
+            controller.onStartListening(permissionGranted = true)
+        } else {
+            controller.onScreenVisible(permissionGranted = false)
+        }
     }
 
-    LaunchedEffect(permissionGranted) {
+    LaunchedEffect(Unit) {
         controller.onScreenVisible(permissionGranted)
     }
 
@@ -96,17 +100,24 @@ fun LocalAcrDemoApp() {
 
     DemoScreen(
         state = state,
-        permissionGranted = permissionGranted,
-        onRequestPermission = { permissionLauncher.launch(Manifest.permission.RECORD_AUDIO) },
+        onStart = {
+            if (context.hasRecordAudioPermission()) {
+                controller.onStartListening(permissionGranted = true)
+            } else {
+                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            }
+        },
+        onStop = { controller.onStopListening() },
     )
 }
 
 @Composable
 fun DemoScreen(
     state: DemoState,
-    permissionGranted: Boolean,
-    onRequestPermission: () -> Unit,
+    onStart: () -> Unit,
+    onStop: () -> Unit,
 ) {
+    val active = state.status == DemoListeningStatus.Preparing || state.status == DemoListeningStatus.Listening
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -117,13 +128,13 @@ fun DemoScreen(
         Spacer(Modifier.height(8.dp))
         Text("Play one of the bundled tracks nearby. Recognition runs fully on this device.")
         Spacer(Modifier.height(24.dp))
-        Text("Status: ${state.status}")
-
-        if (!permissionGranted) {
-            Spacer(Modifier.height(16.dp))
-            Button(onClick = onRequestPermission) {
-                Text("Allow microphone")
-            }
+        Text(statusLabel(state.status), style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(16.dp))
+        Button(
+            onClick = if (active) onStop else onStart,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(if (active) "Stop listening" else "Start listening")
         }
 
         state.errorMessage?.let { message ->
@@ -148,6 +159,15 @@ fun DemoScreen(
         }
     }
 }
+
+private fun statusLabel(status: DemoListeningStatus): String =
+    when (status) {
+        DemoListeningStatus.Idle -> "Not listening"
+        DemoListeningStatus.PermissionRequired -> "Microphone access is needed to listen"
+        DemoListeningStatus.Preparing -> "Starting"
+        DemoListeningStatus.Listening -> "Listening"
+        DemoListeningStatus.Error -> "Stopped"
+    }
 
 private fun formatPosition(positionMs: Long): String {
     val totalSeconds = positionMs / 1_000

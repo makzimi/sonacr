@@ -18,7 +18,8 @@ class SharedLocalAcrDemoRecognizer(
     private var prepareErrorMessage: String? = null
 
     override fun prepare(): DemoOperationResult {
-        if (prepared) {
+        // A recognizer that exists is either prepared or still preparing; creating another would leak it.
+        if (prepared || recognizer != null) {
             return DemoOperationResult.Success
         }
 

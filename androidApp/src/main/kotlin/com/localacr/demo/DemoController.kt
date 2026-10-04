@@ -55,25 +55,37 @@ class DemoController(
     private var automaticRestarts = 0
 
     fun onScreenVisible(permissionGranted: Boolean) {
+        val status = if (permissionGranted) DemoListeningStatus.Idle else DemoListeningStatus.PermissionRequired
+        setState(state.copy(status = status, errorMessage = null))
+    }
+
+    fun onStartListening(permissionGranted: Boolean) {
         if (!permissionGranted) {
             setState(state.copy(status = DemoListeningStatus.PermissionRequired, errorMessage = null))
             return
         }
 
         automaticRestarts = 0
-        setState(state.copy(status = DemoListeningStatus.Preparing, errorMessage = null))
+        setState(state.copy(status = DemoListeningStatus.Preparing, nowPlaying = null, errorMessage = null))
         when (val prepareResult = recognizer.prepare()) {
             DemoOperationResult.Success -> startListening()
             is DemoOperationResult.Failure -> showError(prepareResult.message)
         }
     }
 
-    fun onScreenHidden() {
+    fun onStopListening() {
         recognizer.stop()
         setState(state.copy(status = DemoListeningStatus.Idle))
     }
 
+    fun onScreenHidden() {
+        onStopListening()
+    }
+
     override fun onRecognized(result: RecognitionResult) {
+        if (!isActive()) {
+            return
+        }
         automaticRestarts = 0
         val track = catalog.lookup(result.triggerId)
         setState(
@@ -92,6 +104,9 @@ class DemoController(
     }
 
     override fun onError(error: RecognitionError) {
+        if (!isActive()) {
+            return
+        }
         if (state.status == DemoListeningStatus.Listening && automaticRestarts < MaxAutomaticRestarts) {
             automaticRestarts += 1
             startListening()
@@ -107,6 +122,9 @@ class DemoController(
             is DemoOperationResult.Failure -> showError(startResult.message)
         }
     }
+
+    private fun isActive(): Boolean =
+        state.status == DemoListeningStatus.Preparing || state.status == DemoListeningStatus.Listening
 
     private fun showError(message: String) {
         setState(state.copy(status = DemoListeningStatus.Error, errorMessage = message))
