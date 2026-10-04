@@ -1,0 +1,5 @@
+add_library(local_acr_jni SHARED src/local_acr_jni.cpp)
+target_link_libraries(local_acr_jni PRIVATE local_acr_core)
+target_compile_features(local_acr_jni PRIVATE cxx_std_20)
+lacr_apply_warnings(local_acr_jni)
+lacr_apply_strict_fp(local_acr_jni)

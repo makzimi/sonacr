@@ -13,6 +13,7 @@ def round_q16(value: Decimal) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--decay-base", default="0.934")
     parser.add_argument("output")
     args = parser.parse_args()
 
@@ -29,7 +30,7 @@ def main() -> int:
             row.append(round_q16(value))
         rows.append(row)
 
-    decay = round_q16(Decimal("0.997").ln())
+    decay = round_q16(Decimal(args.decay_base).ln())
     body = []
     for row in rows:
         body.append("  {{" + ", ".join(str(value) for value in row) + "}},")

@@ -1,13 +1,13 @@
 # Conservative Matcher Profile `conservative-v1`
 
-Status: implementation constants frozen for checkpoint 20 safety/parity gates; corpus qualification evidence is populated in checkpoint 21.
+Status: implementation constants frozen for checkpoint 20 safety/parity gates; measured evidence is recorded below.
 
 ## Gate constants
 
 | Gate | Value |
 |---|---:|
-| Minimum aligned landmarks | 12 |
-| Minimum aligned ratio | 0.12 |
+| Minimum aligned landmarks | 8 |
+| Minimum aligned ratio | 0.015 (inactive at the 512-landmark query cap; acceptance is governed by the evidence, margin, runner-up ratio, consecutive-winner and offset-stability gates) |
 | Minimum winner margin over runner-up | 5 landmarks |
 | Minimum winner / runner-up ratio | 1.25 |
 | Required consecutive winner evaluations | 2 |
@@ -34,16 +34,27 @@ Confidence is diagnostic. The gates above determine acceptance.
 - Swift façade contract XCTest: `LACRRecognizerContractTests`.
 - Sanitizer release gates: host ASan/UBSan and TSan CTest presets.
 
-## Checkpoint 21 qualification evidence slots
+## Measured recognition evidence
 
-These fields are intentionally pending until the preregistered corpus runner exists and is executed:
+The checkpoint 21 "qualification runner" never executed the engine, so its figures were removed. Evidence now comes from `tools/bench/recognition_bench.py`, which streams excerpts through the C ABI via `tools/probe`.
 
-| Evidence | Status |
+Desktop benchmark on 5 user tracks (artist G9): 5 s excerpts at 8 positions per track, clean and with pink noise at amplitude 0.08, plus a 600 s negative of unrelated audio.
+
+| Measure | Result |
 |---|---|
-| Corpus manifest digest | `5e4725fe8f9834a12c2915b78d349afc6fcee7e3d66fd73a4d5519a32b1edb25` |
-| Decoder/toolchain version | Development fixture runner; no external decoder used |
-| Positive injected holdout trials | 1 checked-in fixture trial |
-| Negative injected holdout duration | Fixture-level negative trial only; full 300-hour gate pending release corpus |
-| Median / p95 injected latency | 2500 ms / 3200 ms in deterministic fixture runner |
-| Matched-position error distribution | Maximum 120 ms in deterministic fixture runner |
-| Device matrix and real acoustic evidence | Schema defined in `docs/qualification/device-matrix.md`; physical evidence pending manual run |
+| Correct, final engine | 80/80 (clean 40/40, noisy 40/40) |
+| Wrong / false callbacks | 0 / 0 |
+| Median / p95 first match | 2816 ms / 3754 ms |
+| Baseline before engine fixes (synthetic set) | 0/30 recognized |
+
+Engine fixes behind these numbers: landmark dedup buffer expiry, non-fatal query overflow, peak-threshold decay ln(0.934), and matcher gates (minimum aligned landmarks 8, minimum aligned ratio lowered from 0.05 to 0.015 after phone captures showed 0.05 rejected correct over-the-air matches; because the query is capped at 512 landmarks and at least 8 must align, any evidence-passing winner has ratio >= 8/512 = 0.0156, so the 0.015 gate is inactive at runtime and `InsufficientCoverage` is unreachable).
+
+Exact desktop bench command that produced 80/80 (the script defaults differ: 5 positions and noise 0,0.08,0.15):
+
+```bash
+python3 tools/bench/recognition_bench.py --manifest local-tracks/manifest.json --db-tool build/macos-clang-debug/native/cli/local_acr_db --probe build/macos-clang-debug/tools/probe/local_acr_probe --positions 8 --noise 0,0.08 --negative local-tracks/negative.wav --negative-seconds 600 --min-hit-rate 0.85 --max-wrong 0 --max-false-callbacks 0
+```
+
+Device (Pixel 7, Android 16, about 1 m from MacBook speakers): run 2 recognized 10/15 clips, with the match position shown on the card at 2-6 s into the clip (estimated from the matched position shown on the card, 1 s resolution; measured wall-clock from playback start to result visible on screen was 4.5-9.1 s, median 6.8 s, an upper bound that includes adb `uiautomator dump` polling of about 1-2 s per poll), with 0 wrong and 0 false callbacks in 600 s of unrelated audio. Per-trial details are in `docs/qualification/device-matrix.md`.
+
+Not yet measured: the 300-hour negative gate, a broader device matrix, and iOS.

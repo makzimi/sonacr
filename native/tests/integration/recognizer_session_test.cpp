@@ -212,24 +212,20 @@ void stop_and_restart_resets_timeline_and_generation() {
   check(found_generation_two, "second session emits generation two recognition");
 }
 
-void query_density_error_is_terminal_and_resets_session() {
+void query_density_overflow_keeps_session_alive() {
   const std::vector<float> samples = make_pcm(11025 * 3);
   local_acr::DatabaseReader reader = build_reader_from_pcm(samples);
   local_acr::Recognizer recognizer(11025);
   check_status_ok(recognizer.prepare(reader), "density recognizer prepares");
   check_status_ok(recognizer.start_session(9), "density session starts");
-  check(recognizer.inject_query_landmarks_for_test(513, 200).code() ==
-            local_acr::StatusCode::ResourceLimitExceeded,
-        "density test returns resource-limit status");
+  check_status_ok(recognizer.inject_query_landmarks_for_test(513, 200),
+                  "query overflow is trimmed instead of failing");
 
   const std::vector<local_acr::RecognizerEvent> events = drain(recognizer);
-  check(events.size() == 1, "density emits one terminal event");
-  if (!events.empty()) {
-    check(events[0].type == local_acr::RecognizerEventType::SessionError, "density emits session error");
-    check(events[0].error == local_acr::RecognizerError::QueryDensityExceeded, "density error code");
-    check(events[0].generation == 9, "density error carries generation");
+  for (const local_acr::RecognizerEvent& event : events) {
+    check(event.type != local_acr::RecognizerEventType::SessionError, "overflow emits no session error");
   }
-  check(!recognizer.active(), "density error resets the session");
+  check(recognizer.active(), "overflow keeps the session active");
 }
 
 }  // namespace
@@ -237,6 +233,6 @@ void query_density_error_is_terminal_and_resets_session() {
 int main() {
   recognizer_emits_generation_tagged_match_after_consecutive_evaluations();
   stop_and_restart_resets_timeline_and_generation();
-  query_density_error_is_terminal_and_resets_session();
+  query_density_overflow_keeps_session_alive();
   return failures == 0 ? 0 : 1;
 }

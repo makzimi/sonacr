@@ -1,6 +1,7 @@
 #include "session/recognizer.hpp"
 
 #include <algorithm>
+#include <cstddef>
 #include <cstdint>
 #include <span>
 #include <string>
@@ -149,10 +150,8 @@ Status Recognizer::evaluate_until_current() noexcept {
   }
   while (newest_time_frame_ >= next_evaluation_frame_) {
     if (query_.size() > kMaxQueryLandmarks) {
-      emit_error(RecognizerError::QueryDensityExceeded);
-      reset_session_state();
-      active_ = false;
-      return Status::resource_limit_exceeded();
+      query_.erase(query_.begin(),
+                   query_.end() - static_cast<std::ptrdiff_t>(kMaxQueryLandmarks));
     }
     if (next_evaluation_frame_ >= kFirstEvaluationFrame) {
       const Status status = evaluate_once();
@@ -175,9 +174,7 @@ Status Recognizer::evaluate_once() noexcept {
   CandidateLookupResult lookup_result = lookup_.lookup(*reader_, query_);
   if (!lookup_result.status.ok()) {
     if (lookup_result.status.code() == StatusCode::ResourceLimitExceeded) {
-      emit_error(RecognizerError::QueryDensityExceeded);
-      reset_session_state();
-      active_ = false;
+      return Status::ok_status();
     }
     return lookup_result.status;
   }

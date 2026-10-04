@@ -148,6 +148,15 @@ void LandmarkBuilder::expire_before(const std::uint32_t target_time_frame) noexc
     }
   }
   retained_count_ = write;
+  std::size_t identity_write = 0;
+  for (std::size_t read = 0; read < emitted_identity_count_; ++read) {
+    const Landmark& identity = emitted_identities_[read];
+    if (target_time_frame <= identity.anchor_time_frame ||
+        target_time_frame - identity.anchor_time_frame <= kMaximumDeltaTime) {
+      emitted_identities_[identity_write++] = identity;
+    }
+  }
+  emitted_identity_count_ = identity_write;
 }
 
 bool LandmarkBuilder::has_emitted_identity(const Landmark& landmark) const noexcept {

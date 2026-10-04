@@ -10,7 +10,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import java.io.File
 
-private const val DemoDatabaseAsset = "venue-demo.lacrdb"
+private const val DemoDatabaseAsset = "tracks.lacrdb"
+private const val CatalogAsset = "catalog.tsv"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,13 +52,27 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun LocalAcrDemoApp() {
     val context = LocalContext.current
+    val databasePath = remember {
+        runCatching { context.copyAssetToFiles(DemoDatabaseAsset).absolutePath }.getOrNull()
+    }
+    if (databasePath == null) {
+        Text(
+            "Missing $DemoDatabaseAsset. Run tools/demo/build_demo_assets.py and rebuild the app.",
+            modifier = Modifier.padding(24.dp),
+        )
+        return
+    }
     var permissionGranted by remember {
         mutableStateOf(context.hasRecordAudioPermission())
     }
     var state by remember { mutableStateOf(DemoState()) }
     val controller = remember {
+        val catalog = runCatching {
+            TrackCatalog.parse(context.assets.open(CatalogAsset).bufferedReader().use { it.readText() })
+        }.getOrDefault(TrackCatalog(emptyMap()))
         DemoController(
-            SharedLocalAcrDemoRecognizer(context.copyAssetToFiles(DemoDatabaseAsset).absolutePath),
+            SharedLocalAcrDemoRecognizer(databasePath),
+            catalog,
             onStateChanged = { state = it },
         )
     }
@@ -85,12 +98,6 @@ fun LocalAcrDemoApp() {
         state = state,
         permissionGranted = permissionGranted,
         onRequestPermission = { permissionLauncher.launch(Manifest.permission.RECORD_AUDIO) },
-        onCta = {
-            controller.onPromotionCta()
-        },
-        onDismiss = {
-            controller.onDismissPromotion()
-        },
     )
 }
 
@@ -99,8 +106,6 @@ fun DemoScreen(
     state: DemoState,
     permissionGranted: Boolean,
     onRequestPermission: () -> Unit,
-    onCta: () -> Unit,
-    onDismiss: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -108,9 +113,9 @@ fun DemoScreen(
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
     ) {
-        Text("Local ACR Demo", style = MaterialTheme.typography.headlineMedium)
+        Text("Local ACR", style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(8.dp))
-        Text("Listen for a venue cue and show a local promotion.")
+        Text("Play one of the bundled tracks nearby. Recognition runs fully on this device.")
         Spacer(Modifier.height(24.dp))
         Text("Status: ${state.status}")
 
@@ -126,33 +131,27 @@ fun DemoScreen(
             Text("Recognition error: $message", color = MaterialTheme.colorScheme.error)
         }
 
-        state.promotion?.let { promotion ->
+        state.nowPlaying?.let { track ->
             Spacer(Modifier.height(24.dp))
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(promotion.title, style = MaterialTheme.typography.titleLarge)
+                    Text("Now playing", style = MaterialTheme.typography.labelLarge)
                     Spacer(Modifier.height(8.dp))
-                    Text(promotion.body)
-                    Spacer(Modifier.height(8.dp))
-                    Text("Trigger: ${promotion.triggerId} · confidence ${promotion.confidence}")
-                    Spacer(Modifier.height(16.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Button(onClick = onCta) {
-                            Text(promotion.cta)
-                        }
-                        OutlinedButton(onClick = onDismiss) {
-                            Text("Dismiss")
-                        }
+                    Text(track.title, style = MaterialTheme.typography.titleLarge)
+                    if (track.artist.isNotBlank()) {
+                        Text(track.artist)
                     }
+                    Spacer(Modifier.height(8.dp))
+                    Text("at ${formatPosition(track.matchedPositionMs)} · confidence ${(track.confidence * 100).toInt()}%")
                 }
             }
         }
-
-        state.localActionMessage?.let { message ->
-            Spacer(Modifier.height(16.dp))
-            Text(message)
-        }
     }
+}
+
+private fun formatPosition(positionMs: Long): String {
+    val totalSeconds = positionMs / 1_000
+    return "%d:%02d".format(totalSeconds / 60, totalSeconds % 60)
 }
 
 private fun Context.hasRecordAudioPermission(): Boolean =
@@ -160,9 +159,6 @@ private fun Context.hasRecordAudioPermission(): Boolean =
 
 private fun Context.copyAssetToFiles(assetName: String): File {
     val target = File(filesDir, assetName)
-    if (target.exists() && target.length() > 0L) {
-        return target
-    }
     assets.open(assetName).use { input ->
         target.outputStream().use { output ->
             input.copyTo(output)

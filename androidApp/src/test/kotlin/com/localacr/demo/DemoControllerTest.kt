@@ -6,13 +6,16 @@ import com.localacr.RecognitionResult
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class DemoControllerTest {
+    private val catalog = TrackCatalog(mapOf("track-a" to TrackInfo("Song A", "Artist A")))
+
     @Test
     fun waitsForPermissionBeforeListening() {
         val sdk = FakeDemoSdk()
-        val controller = DemoController(sdk)
+        val controller = DemoController(sdk, catalog)
 
         controller.onScreenVisible(permissionGranted = false)
 
@@ -23,7 +26,7 @@ class DemoControllerTest {
     @Test
     fun preparesAndStartsWhenPermissionGranted() {
         val sdk = FakeDemoSdk()
-        val controller = DemoController(sdk)
+        val controller = DemoController(sdk, catalog)
 
         controller.onScreenVisible(permissionGranted = true)
 
@@ -33,72 +36,45 @@ class DemoControllerTest {
     }
 
     @Test
-    fun recognitionShowsPromotionFromMetadata() {
-        val sdk = FakeDemoSdk()
-        val controller = DemoController(sdk)
+    fun recognitionShowsNowPlayingFromCatalog() {
+        val states = mutableListOf<DemoState>()
+        val controller = DemoController(FakeDemoSdk(), catalog, onStateChanged = { states += it })
         controller.onScreenVisible(permissionGranted = true)
 
-        sdk.listener!!.onRecognized(
-            RecognitionResult(
-                triggerId = "welcome",
-                displayName = "Welcome cue",
-                confidence = 0.92f,
-                matchedPositionMs = 1_250,
-                resultAgeMs = 35,
-                metadataJson = "{\"title\":\"20% off\",\"body\":\"Show this today\",\"cta\":\"Claim\"}",
-            ),
-        )
+        controller.onRecognized(result("track-a"))
 
-        assertEquals("20% off", controller.state.promotion?.title)
-        assertEquals("Show this today", controller.state.promotion?.body)
-        assertEquals("Claim", controller.state.promotion?.cta)
-        assertEquals("welcome", controller.state.lastRecognizedTriggerId)
+        val nowPlaying = controller.state.nowPlaying
+        assertEquals("Song A", nowPlaying?.title)
+        assertEquals("Artist A", nowPlaying?.artist)
+        assertEquals(83_000L, nowPlaying?.matchedPositionMs)
+        assertEquals(nowPlaying, states.last().nowPlaying)
     }
 
     @Test
-    fun stateObserverReceivesRecognitionUpdates() {
-        val sdk = FakeDemoSdk()
-        val observed = mutableListOf<DemoState>()
-        val controller = DemoController(sdk, onStateChanged = { observed += it })
+    fun unknownTriggerFallsBackToTriggerId() {
+        val controller = DemoController(FakeDemoSdk(), catalog)
         controller.onScreenVisible(permissionGranted = true)
 
-        sdk.emit("same", "{\"title\":\"First\",\"body\":\"Body\",\"cta\":\"Open\"}")
+        controller.onRecognized(result("unlisted"))
 
-        assertEquals("First", observed.last().promotion?.title)
+        assertEquals("unlisted", controller.state.nowPlaying?.title)
     }
 
     @Test
-    fun repeatedTriggerWithinUiCooldownDoesNotReplacePromotion() {
-        val sdk = FakeDemoSdk()
-        val clock = FakeClock()
-        val controller = DemoController(sdk, clock)
+    fun differentTrackReplacesNowPlaying() {
+        val controller = DemoController(FakeDemoSdk(), catalog)
         controller.onScreenVisible(permissionGranted = true)
 
-        sdk.emit("same", "{\"title\":\"First\",\"body\":\"Body\",\"cta\":\"Open\"}")
-        clock.nowMs = 1_000
-        sdk.emit("same", "{\"title\":\"Second\",\"body\":\"Body\",\"cta\":\"Open\"}")
-        sdk.emit("other", "{\"title\":\"Other\",\"body\":\"Body\",\"cta\":\"Open\"}")
+        controller.onRecognized(result("track-a"))
+        controller.onRecognized(result("track-b"))
 
-        assertEquals("Other", controller.state.promotion?.title)
-    }
-
-    @Test
-    fun localCtaAndDismissUpdateStateWithoutNetworkAction() {
-        val sdk = FakeDemoSdk()
-        val controller = DemoController(sdk)
-        controller.onScreenVisible(permissionGranted = true)
-        sdk.emit("same", "{\"title\":\"First\",\"body\":\"Body\",\"cta\":\"Open\"}")
-
-        controller.onPromotionCta()
-        assertEquals("Claimed locally", controller.state.localActionMessage)
-        controller.onDismissPromotion()
-        assertEquals(null, controller.state.promotion)
+        assertEquals("track-b", controller.state.nowPlaying?.triggerId)
     }
 
     @Test
     fun screenDisappearStopsListening() {
         val sdk = FakeDemoSdk()
-        val controller = DemoController(sdk)
+        val controller = DemoController(sdk, catalog)
         controller.onScreenVisible(permissionGranted = true)
 
         controller.onScreenHidden()
@@ -108,30 +84,87 @@ class DemoControllerTest {
     }
 
     @Test
-    fun recognizerErrorIsDisplayed() {
+    fun runtimeErrorRestartsListeningAutomatically() {
         val sdk = FakeDemoSdk()
-        val controller = DemoController(sdk)
+        val controller = DemoController(sdk, catalog)
         controller.onScreenVisible(permissionGranted = true)
 
-        sdk.listener!!.onError(
-            RecognitionError(RecognitionErrorCode.AudioInterrupted, "interrupted", recoverable = true),
-        )
+        controller.onError(error("transient"))
+
+        assertEquals(2, sdk.startCount)
+        assertEquals(DemoListeningStatus.Listening, controller.state.status)
+        assertNull(controller.state.errorMessage)
+    }
+
+    @Test
+    fun repeatedErrorsWithoutRecognitionAreDisplayed() {
+        val sdk = FakeDemoSdk()
+        val controller = DemoController(sdk, catalog)
+        controller.onScreenVisible(permissionGranted = true)
+
+        repeat(4) { controller.onError(error("broken")) }
+
+        assertEquals(4, sdk.startCount)
+        assertEquals(DemoListeningStatus.Error, controller.state.status)
+        assertEquals("broken", controller.state.errorMessage)
+    }
+
+    @Test
+    fun asyncStartFailuresAfterSynchronousSuccessAreDisplayedAfterCap() {
+        val sdk = FakeDemoSdk()
+        val controller = DemoController(sdk, catalog)
+        controller.onScreenVisible(permissionGranted = true)
+
+        repeat(4) { controller.onError(error("microphone busy")) }
 
         assertEquals(DemoListeningStatus.Error, controller.state.status)
-        assertEquals("interrupted", controller.state.errorMessage)
+        assertEquals("microphone busy", controller.state.errorMessage)
+    }
+
+    @Test
+    fun asyncPrepareFailureIsDisplayedInsteadOfFakeListening() {
+        val sdk = FakeDemoSdk()
+        val controller = DemoController(sdk, catalog)
+        controller.onScreenVisible(permissionGranted = true)
+        sdk.startFailure = "database invalid"
+
+        controller.onError(error("database invalid"))
+
+        assertEquals(DemoListeningStatus.Error, controller.state.status)
+        assertEquals("database invalid", controller.state.errorMessage)
+    }
+
+    private fun result(triggerId: String) =
+        RecognitionResult(
+            triggerId = triggerId,
+            displayName = triggerId,
+            confidence = 0.9f,
+            matchedPositionMs = 83_000,
+            resultAgeMs = 0,
+            metadataJson = "{}",
+        )
+
+    private fun error(message: String) =
+        RecognitionError(RecognitionErrorCode.NativeEngineFailure, message, recoverable = true)
+}
+
+class TrackCatalogTest {
+    @Test
+    fun parsesTabSeparatedLinesAndSkipsMalformedOnes() {
+        val catalog = TrackCatalog.parse("a\tSong A\tArtist A\nb\tSong B\n\nbroken-line\n")
+
+        assertEquals(2, catalog.size)
+        assertEquals(TrackInfo("Song A", "Artist A"), catalog.lookup("a"))
+        assertEquals(TrackInfo("Song B", ""), catalog.lookup("b"))
     }
 }
 
-private class FakeClock : DemoClock {
-    var nowMs: Long = 0
-    override fun nowMs(): Long = nowMs
-}
-
 private class FakeDemoSdk : DemoRecognizer {
-    var listener: DemoRecognitionListener? = null
     var prepared = false
     var started = false
     var stopped = false
+    var startCount = 0
+    var startFailure: String? = null
 
     override fun prepare(): DemoOperationResult {
         prepared = true
@@ -139,27 +172,17 @@ private class FakeDemoSdk : DemoRecognizer {
     }
 
     override fun start(listener: DemoRecognitionListener): DemoOperationResult {
-        this.listener = listener
         started = true
-        return DemoOperationResult.Success
+        startCount += 1
+        return if (startFailure != null) {
+            DemoOperationResult.Failure(startFailure!!)
+        } else {
+            DemoOperationResult.Success
+        }
     }
 
     override fun stop(): DemoOperationResult {
         stopped = true
-        started = false
         return DemoOperationResult.Success
-    }
-
-    fun emit(triggerId: String, metadataJson: String) {
-        listener!!.onRecognized(
-            RecognitionResult(
-                triggerId = triggerId,
-                displayName = triggerId,
-                confidence = 0.9f,
-                matchedPositionMs = 1,
-                resultAgeMs = 1,
-                metadataJson = metadataJson,
-            ),
-        )
     }
 }

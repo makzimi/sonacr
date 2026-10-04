@@ -66,8 +66,8 @@ void feed_warmup(PeakSelector& selector, CapturingPeakSink& sink) {
 }
 
 void generated_constants_are_checked() {
-  check(local_acr::kThresholdDecayQ16 == reference_round_q16(std::log(0.997)),
-        "threshold decay is round_q16(ln(0.997))");
+  check(local_acr::kThresholdDecayQ16 == reference_round_q16(std::log(0.934)),
+        "threshold decay is round_q16(ln(0.934))");
   check(local_acr::kGaussianPenaltiesQ16.size() == 255, "Gaussian source-bin count");
   check(local_acr::kGaussianPenaltiesQ16[0].size() == 255, "Gaussian target-bin count");
   check(local_acr::kGaussianPenaltiesQ16[6][6] == 0, "Gaussian self penalty is zero");

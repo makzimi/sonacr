@@ -15,6 +15,7 @@ class SharedLocalAcrDemoRecognizer(
     private var recognizer: LocalAcrRecognizer? = null
     private var prepared = false
     private var pendingListener: DemoRecognitionListener? = null
+    private var prepareErrorMessage: String? = null
 
     override fun prepare(): DemoOperationResult {
         if (prepared) {
@@ -33,6 +34,9 @@ class SharedLocalAcrDemoRecognizer(
     }
 
     override fun start(listener: DemoRecognitionListener): DemoOperationResult {
+        if (prepareErrorMessage != null) {
+            return DemoOperationResult.Failure(prepareErrorMessage!!)
+        }
         pendingListener = listener
         if (!prepared) {
             return DemoOperationResult.Success
@@ -50,6 +54,7 @@ class SharedLocalAcrDemoRecognizer(
     private fun onPrepared(result: PrepareResult) {
         val error = result.error
         if (error != null) {
+            prepareErrorMessage = error.message
             pendingListener?.onError(error)
             return
         }
@@ -83,6 +88,8 @@ class SharedLocalAcrDemoRecognizer(
             },
         ) { result: OperationResult ->
             operationError = result.error
+            // Completion is dispatched asynchronously, so the synchronous return below cannot see it.
+            result.error?.let { listener.onError(it) }
         }
         return operationError?.let { DemoOperationResult.Failure(it.message) } ?: DemoOperationResult.Success
     }

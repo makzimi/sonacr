@@ -3,7 +3,7 @@ package com.localacr.demo
 import com.localacr.RecognitionError
 import com.localacr.RecognitionResult
 
-private const val PromotionCooldownMs = 30_000L
+private const val MaxAutomaticRestarts = 3
 
 enum class DemoListeningStatus {
     Idle,
@@ -13,29 +13,19 @@ enum class DemoListeningStatus {
     Error,
 }
 
-data class DemoPromotion(
+data class NowPlaying(
     val triggerId: String,
     val title: String,
-    val body: String,
-    val cta: String,
+    val artist: String,
     val confidence: Float,
+    val matchedPositionMs: Long,
 )
 
 data class DemoState(
     val status: DemoListeningStatus = DemoListeningStatus.Idle,
-    val promotion: DemoPromotion? = null,
-    val lastRecognizedTriggerId: String? = null,
-    val localActionMessage: String? = null,
+    val nowPlaying: NowPlaying? = null,
     val errorMessage: String? = null,
 )
-
-interface DemoClock {
-    fun nowMs(): Long
-}
-
-object SystemDemoClock : DemoClock {
-    override fun nowMs(): Long = System.nanoTime() / 1_000_000L
-}
 
 sealed class DemoOperationResult {
     data object Success : DemoOperationResult()
@@ -55,14 +45,14 @@ interface DemoRecognizer {
 
 class DemoController(
     private val recognizer: DemoRecognizer,
-    private val clock: DemoClock = SystemDemoClock,
+    private val catalog: TrackCatalog = TrackCatalog(emptyMap()),
     initialState: DemoState = DemoState(),
     private val onStateChanged: (DemoState) -> Unit = {},
 ) : DemoRecognitionListener {
     var state: DemoState = initialState
         private set
 
-    private val lastPromotionByTriggerMs = mutableMapOf<String, Long>()
+    private var automaticRestarts = 0
 
     fun onScreenVisible(permissionGranted: Boolean) {
         if (!permissionGranted) {
@@ -70,6 +60,7 @@ class DemoController(
             return
         }
 
+        automaticRestarts = 0
         setState(state.copy(status = DemoListeningStatus.Preparing, errorMessage = null))
         when (val prepareResult = recognizer.prepare()) {
             DemoOperationResult.Success -> startListening()
@@ -82,41 +73,30 @@ class DemoController(
         setState(state.copy(status = DemoListeningStatus.Idle))
     }
 
-    fun onPromotionCta() {
-        setState(state.copy(localActionMessage = "Claimed locally"))
-    }
-
-    fun onDismissPromotion() {
-        setState(state.copy(promotion = null))
-    }
-
     override fun onRecognized(result: RecognitionResult) {
-        val nowMs = clock.nowMs()
-        val previousMs = lastPromotionByTriggerMs[result.triggerId]
-        if (previousMs != null && nowMs - previousMs < PromotionCooldownMs) {
-            return
-        }
-        lastPromotionByTriggerMs[result.triggerId] = nowMs
-
-        val metadata = PromotionMetadata.parse(result.metadataJson)
+        automaticRestarts = 0
+        val track = catalog.lookup(result.triggerId)
         setState(
             state.copy(
                 status = DemoListeningStatus.Listening,
-                promotion = DemoPromotion(
+                nowPlaying = NowPlaying(
                     triggerId = result.triggerId,
-                    title = metadata.title.ifBlank { result.displayName },
-                    body = metadata.body.ifBlank { "Recognized ${result.displayName}" },
-                    cta = metadata.cta.ifBlank { "Show offer" },
+                    title = track.title,
+                    artist = track.artist,
                     confidence = result.confidence,
+                    matchedPositionMs = result.matchedPositionMs,
                 ),
-                lastRecognizedTriggerId = result.triggerId,
-                localActionMessage = null,
                 errorMessage = null,
             ),
         )
     }
 
     override fun onError(error: RecognitionError) {
+        if (state.status == DemoListeningStatus.Listening && automaticRestarts < MaxAutomaticRestarts) {
+            automaticRestarts += 1
+            startListening()
+            return
+        }
         showError(error.message)
     }
 
@@ -137,30 +117,3 @@ class DemoController(
         onStateChanged(nextState)
     }
 }
-
-private data class PromotionMetadata(
-    val title: String = "",
-    val body: String = "",
-    val cta: String = "",
-) {
-    companion object {
-        fun parse(json: String): PromotionMetadata =
-            PromotionMetadata(
-                title = json.readJsonString("title"),
-                body = json.readJsonString("body"),
-                cta = json.readJsonString("cta"),
-            )
-    }
-}
-
-private fun String.readJsonString(name: String): String {
-    val pattern = Regex("\"${Regex.escape(name)}\"\\s*:\\s*\"((?:\\\\.|[^\"])*)\"")
-    return pattern.find(this)?.groupValues?.get(1)?.unescapeJsonString().orEmpty()
-}
-
-private fun String.unescapeJsonString(): String =
-    replace("\\\"", "\"")
-        .replace("\\\\", "\\")
-        .replace("\\n", "\n")
-        .replace("\\r", "\r")
-        .replace("\\t", "\t")

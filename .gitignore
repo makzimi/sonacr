@@ -24,3 +24,8 @@ __pycache__/
 
 # Reference projects supplied for analysis only. Do not publish or package.
 examples/
+
+# User-supplied tracks and assets derived from them. Never commit.
+local-tracks/
+androidApp/src/main/assets/tracks.lacrdb
+androidApp/src/main/assets/catalog.tsv

@@ -95,3 +95,10 @@ This just-in-time expansion keeps later implementation details aligned with the 
 
 - 2026-07-11: The approved design was initially decomposed as review-sized trunk-development slices.
 - 2026-07-11: Replaced PR-oriented execution with solo checkpoint commits at the user's request. Isolation, TDD, verification, and rollback boundaries remain; PR mechanics and approval gates were removed.
+
+## Status corrections (2026-10-04)
+
+- Checkpoint 21's figures (2/2 positives recognized, median/p95 latency 2500/3200 ms, max position error 120 ms) came from a qualification runner that never executed the engine: it marked every positive trial as recognized and computed latency from a formula. The runner and its fixture corpus have been deleted, and those figures are not evidence.
+- Real-audio recognition and the Android JNI layer were missing until the Android prototype plan: [2026-10-04-local-acr-android-prototype.md](2026-10-04-local-acr-android-prototype.md).
+- Measured evidence now lives in `tools/bench/recognition_bench.py` results and [docs/qualification/device-matrix.md](../../qualification/device-matrix.md).
+- iOS is not done: simulator-only, no event delivery. See the plan's "Follow-up plan: iOS" section.

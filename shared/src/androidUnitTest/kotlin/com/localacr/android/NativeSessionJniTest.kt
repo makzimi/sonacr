@@ -82,6 +82,65 @@ class NativeSessionJniTest {
         assertTrue(events.single() is NativeEvent.Error)
         assertEquals(RecognitionErrorCode.AudioDiscontinuity, (events.single() as NativeEvent.Error).error.code)
     }
+
+    @Test
+    fun decodesPolledRecognitionSlots() {
+        val event = decodePolledEvent(longArrayOf(0, 1, 0, 861, 875, 14), "track-a")
+
+        val recognition = event as NativeBridgeEvent.Recognition
+        assertEquals("track-a", recognition.triggerId)
+        assertEquals(0.875f, recognition.confidence)
+        assertEquals(9_996L, recognition.matchedPositionMs)
+    }
+
+    @Test
+    fun decodesNoEventAndSessionErrorSlots() {
+        assertNull(decodePolledEvent(longArrayOf(7, 0, 0, 0, 0, 0), null))
+        assertEquals(
+            NativeBridgeEvent.SessionError(NativeBridgeStatus.ResourceLimitExceeded),
+            decodePolledEvent(longArrayOf(0, 2, 1, 0, 0, 0), null),
+        )
+    }
+
+    @Test
+    fun pushPcmDeliversQueuedEventsWithoutExplicitPolling() {
+        val bridge = RecordingNativeBridge()
+        val session = NativeSessionJni("db.lacrdb", RecognitionConfig(), bridge)
+        val events = mutableListOf<NativeEvent>()
+        session.prepare()
+        session.start { events += it }
+        bridge.nextEvent = NativeBridgeEvent.Recognition("track-a", 0.9f, 2_000, 0)
+
+        session.pushPcm(directPcm())
+
+        val recognized = events.single() as NativeEvent.Recognized
+        assertEquals("track-a", recognized.result.triggerId)
+    }
+
+    @Test
+    fun failedPushIsReportedAsRuntimeEvent() {
+        val bridge = RecordingNativeBridge()
+        bridge.pushStatus = NativeBridgeStatus.InvalidState
+        val session = NativeSessionJni("db.lacrdb", RecognitionConfig(), bridge)
+        val events = mutableListOf<NativeEvent>()
+        session.prepare()
+        session.start { events += it }
+
+        val error = session.pushPcm(directPcm())
+
+        assertEquals(RecognitionErrorCode.InvalidState, error?.code)
+        assertTrue(events.single() is NativeEvent.Error)
+    }
+
+    private fun directPcm(): PcmBuffer =
+        PcmBuffer(
+            buffer = ByteBuffer.allocateDirect(256).order(ByteOrder.nativeOrder()),
+            frames = 64,
+            channels = 1,
+            sampleRate = 48_000,
+            firstSourceFrame = 0,
+            format = PcmBuffer.Format.S16Interleaved,
+        )
 }
 
 private class RecordingNativeBridge : NativeBridge {
@@ -89,6 +148,7 @@ private class RecordingNativeBridge : NativeBridge {
     var lastFrames: Int = 0
     var lastFirstSourceFrame: Long = 0
     var nextEvent: NativeBridgeEvent? = null
+    var pushStatus: NativeBridgeStatus = NativeBridgeStatus.Ok
 
     override fun create(databasePath: String, sampleRate: Int): NativeBridgeResult<Long> =
         NativeBridgeResult.ok(42L)
@@ -111,7 +171,7 @@ private class RecordingNativeBridge : NativeBridge {
         lastPushedBuffer = directBuffer
         lastFrames = frames
         lastFirstSourceFrame = firstSourceFrame
-        return NativeBridgeStatus.Ok
+        return pushStatus
     }
 
     override fun pollEvent(handle: Long): NativeBridgeEvent? {

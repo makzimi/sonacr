@@ -178,6 +178,7 @@ The database stores fingerprint and matcher profiles separately. A runtime rejec
 - Re-evaluate every 22 hops, approximately 255 ms.
 - Remove expired samples, frames, peaks, and landmarks incrementally.
 - Keep at most 512 query landmarks. If deterministic peak-density limits would exceed this cap, the evaluation returns no match and the session emits `QueryDensityExceeded` before resetting.
+  Superseded 2026-10-04: query overflow now keeps the newest 512 landmarks and the session continues (see plan 2026-10-04-local-acr-android-prototype.md, Task 3).
 
 ### 7.2 Candidate lookup
 
@@ -476,6 +477,7 @@ The C ABI returns status codes and fills caller-provided error detail buffers. I
 - `AudioOverrun`;
 - `AudioEngineFailure`;
 - `QueryDensityExceeded`;
+  (Superseded 2026-10-04: query overflow now keeps the newest 512 landmarks and the session continues (see plan 2026-10-04-local-acr-android-prototype.md, Task 3).)
 - `ResourceLimitExceeded`;
 - `InvalidState`;
 - `NativeEngineFailure`.

@@ -52,6 +52,20 @@ class AudioRecordCaptureTest {
         assertEquals(RecognitionErrorCode.AudioEngineFailure, capture.terminalErrorForTest?.code)
         assertFalse(source.started)
     }
+
+    @Test
+    fun readFailureIsReportedToCaptureErrorCallbackExactlyOnce() {
+        val source = FakeAudioSource(listOf(-1))
+        val native = RecordingNativeSession()
+        val reported = mutableListOf<com.localacr.RecognitionError>()
+        val capture = AudioRecordCapture(source, native, onCaptureError = { reported += it })
+
+        capture.start()
+        capture.joinForTest()
+
+        assertEquals(1, reported.size)
+        assertEquals(RecognitionErrorCode.AudioEngineFailure, reported.single().code)
+    }
 }
 
 private class FakeAudioSource(private val reads: List<Int>) : AudioSource {

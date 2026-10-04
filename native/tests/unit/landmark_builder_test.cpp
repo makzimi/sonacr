@@ -117,9 +117,22 @@ void unordered_peaks_are_rejected_without_state_advance() {
   check(builder.retained_peak_count() == 1, "rejected batch does not advance state");
 }
 
+void long_streams_do_not_exhaust_duplicate_tracking() {
+  LandmarkBuilder builder;
+  CapturingLandmarkSink sink;
+  bool all_ok = true;
+  for (std::uint32_t time = 0; time < 2000U; ++time) {
+    const std::vector<ConfirmedPeak> frame_peaks{peak(time, 10), peak(time, 20)};
+    all_ok = builder.process(frame_peaks, sink).ok() && all_ok;
+  }
+  check(all_ok, "two peaks per frame for 2000 frames process without resource exhaustion");
+  check(sink.landmarks.size() > 1536U, "emission continues past the duplicate-tracking capacity");
+}
+
 }  // namespace
 
 int main() {
+  long_streams_do_not_exhaust_duplicate_tracking();
   hash_layout_boundaries_and_rejection_rules();
   target_ordering_and_three_target_cap_are_stable();
   duplicate_identity_retains_first_occurrence();

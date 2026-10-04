@@ -71,25 +71,30 @@ local_acr::MatcherEvaluation evaluation(
   };
 }
 
+// Coverage cases use query counts above the runtime 512-landmark cap to exercise the gate in isolation.
 void evidence_and_coverage_boundaries() {
   local_acr::ConservativeMatcher matcher;
 
-  auto result = matcher.evaluate(evaluation({candidate("winner", 10, 11, 100)}));
-  check(!result.recognized.has_value(), "aligned count 11 rejects");
+  auto result = matcher.evaluate(evaluation({candidate("winner", 10, 7, 100)}));
+  check(!result.recognized.has_value(), "aligned count 7 rejects");
   check(result.diagnostics.rejection == local_acr::MatcherRejection::InsufficientEvidence,
         "aligned count diagnostic");
 
-  result = matcher.evaluate(evaluation({candidate("winner", 10, 12, 101)}, local_acr::PreviousWinner{
+  result = matcher.evaluate(evaluation({candidate("winner", 10, 12, 801)}, local_acr::PreviousWinner{
                                                                             .trigger_id = "winner",
                                                                             .center_bucket = 10,
                                                                         },
-                                      101));
-  check(!result.recognized.has_value(), "ratio below 12 percent rejects");
+                                      801));
+  check(!result.recognized.has_value(), "ratio below 1.5 percent rejects");
   check(result.diagnostics.rejection == local_acr::MatcherRejection::InsufficientCoverage,
         "coverage diagnostic");
 
-  result = matcher.evaluate(evaluation({candidate("winner", 10, 12, 100)}));
-  check(result.recognized.has_value(), "aligned count 12 and ratio 12 percent accept");
+  result = matcher.evaluate(evaluation({candidate("winner", 10, 8, 533)}, local_acr::PreviousWinner{
+                                                                           .trigger_id = "winner",
+                                                                           .center_bucket = 10,
+                                                                       },
+                                      533));
+  check(result.recognized.has_value(), "aligned count 8 and ratio 1.5 percent accept");
 }
 
 void runner_up_margin_and_ratio_boundaries() {

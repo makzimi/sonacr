@@ -3,6 +3,6 @@
   "warmupFrames": 10,
   "confirmationDelayFrames": 22,
   "maxCandidatesPerFrame": 5,
-  "thresholdDecayQ16": -197,
+  "thresholdDecayQ16": -4475,
   "notes": "Unit tests construct deterministic in-code vectors for warm-up, plateau, ordering, suppression, bounded storage, and finite EOF behavior."
 }

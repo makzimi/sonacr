@@ -45,7 +45,7 @@ internal class NativeSessionJni(
                 recoverable = true,
             )
         }
-        return bridge.pushPcm(
+        val status = bridge.pushPcm(
             handle = handle,
             generation = generation,
             directBuffer = directBuffer,
@@ -54,7 +54,14 @@ internal class NativeSessionJni(
             sampleRate = pcm.sampleRate,
             firstSourceFrame = pcm.firstSourceFrame,
             format = pcm.format,
-        ).toNullableError("native recognizer push failed")
+        )
+        if (status != NativeBridgeStatus.Ok) {
+            val error = status.toRecognitionError("native recognizer push failed")
+            onEvent?.invoke(NativeEvent.Error(error))
+            return error
+        }
+        drainEvents()
+        return null
     }
 
     override fun stop() {
@@ -70,13 +77,26 @@ internal class NativeSessionJni(
         }
     }
 
+    /** Delivers an error raised outside the native engine (e.g. a capture read failure) as a session event. */
+    fun reportCaptureError(error: RecognitionError) {
+        onEvent?.invoke(NativeEvent.Error(error))
+    }
+
     fun pollOnceForTest() {
         pollOnce()
     }
 
-    private fun pollOnce() {
-        val event = bridge.pollEvent(handle) ?: return
-        val listener = onEvent ?: return
+    private fun drainEvents() {
+        repeat(MaxEventsPerDrain) {
+            if (!pollOnce()) {
+                return
+            }
+        }
+    }
+
+    private fun pollOnce(): Boolean {
+        val event = bridge.pollEvent(handle) ?: return false
+        val listener = onEvent ?: return true
         when (event) {
             is NativeBridgeEvent.Recognition ->
                 listener(
@@ -94,6 +114,11 @@ internal class NativeSessionJni(
             is NativeBridgeEvent.SessionError ->
                 listener(NativeEvent.Error(event.status.toRecognitionError("native session error")))
         }
+        return true
+    }
+
+    private companion object {
+        const val MaxEventsPerDrain = 32
     }
 }
 
@@ -191,7 +216,11 @@ internal object JniNativeBridge : NativeBridge {
             format.ordinal + 1,
         ).toNativeBridgeStatus()
 
-    override fun pollEvent(handle: Long): NativeBridgeEvent? = nativePollEvent(handle)
+    override fun pollEvent(handle: Long): NativeBridgeEvent? {
+        val slots = LongArray(PollSlotCount)
+        val triggerId = nativePollEvent(handle, slots)
+        return decodePolledEvent(slots, triggerId)
+    }
     override fun stopSession(handle: Long, generation: Long): NativeBridgeStatus =
         nativeStopSession(handle, generation).toNativeBridgeStatus()
 
@@ -210,9 +239,39 @@ internal object JniNativeBridge : NativeBridge {
         firstSourceFrame: Long,
         format: Int,
     ): Int
-    private external fun nativePollEvent(handle: Long): NativeBridgeEvent?
+    private external fun nativePollEvent(handle: Long, slots: LongArray): String?
     private external fun nativeStopSession(handle: Long, generation: Long): Int
     private external fun nativeDestroy(handle: Long)
+}
+
+internal const val PollSlotCount = 6
+private const val AnalysisHopFrames = 128L
+private const val AnalysisSampleRate = 11_025L
+
+/** Decodes the slot array filled by nativePollEvent: status, type, error, cue frame, confidence x1000, aligned count. */
+internal fun decodePolledEvent(slots: LongArray, triggerId: String?): NativeBridgeEvent? {
+    val status = slots[0].toInt().toNativeBridgeStatus()
+    if (status == NativeBridgeStatus.NoEvent) {
+        return null
+    }
+    if (status != NativeBridgeStatus.Ok) {
+        return NativeBridgeEvent.SessionError(status)
+    }
+    if (slots[1] == 1L && triggerId != null) {
+        return NativeBridgeEvent.Recognition(
+            triggerId = triggerId,
+            confidence = slots[4] / 1000f,
+            matchedPositionMs = slots[3] * AnalysisHopFrames * 1000L / AnalysisSampleRate,
+            resultAgeMs = 0L,
+        )
+    }
+    return NativeBridgeEvent.SessionError(
+        when (slots[2]) {
+            1L -> NativeBridgeStatus.ResourceLimitExceeded
+            2L -> NativeBridgeStatus.AudioDiscontinuity
+            else -> NativeBridgeStatus.NativeEngineFailure
+        },
+    )
 }
 
 private fun Int.toNativeBridgeStatus(): NativeBridgeStatus =

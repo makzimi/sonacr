@@ -1,0 +1,4 @@
+add_executable(local_acr_probe src/local_acr_probe.c)
+target_link_libraries(local_acr_probe PRIVATE local_acr_core)
+target_compile_features(local_acr_probe PRIVATE c_std_11)
+lacr_apply_sanitizers(local_acr_probe)

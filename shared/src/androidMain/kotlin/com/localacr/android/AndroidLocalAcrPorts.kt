@@ -30,6 +30,7 @@ class AndroidLocalAcrPorts(private val context: Context? = null) : PlatformPorts
                 mediaRecorderSource = AndroidAudioRouting.preferredAudioSource(isUnprocessedSupported()),
             ),
             nativeSession,
+            onCaptureError = { error -> (nativeSession as? NativeSessionJni)?.reportCaptureError(error) },
         )
 
     private fun isUnprocessedSupported(): Boolean {

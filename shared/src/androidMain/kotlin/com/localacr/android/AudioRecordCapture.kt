@@ -16,6 +16,7 @@ import kotlin.concurrent.thread
 internal class AudioRecordCapture(
     private val source: AudioSource,
     private val nativeSession: NativeSessionPort,
+    private val onCaptureError: (RecognitionError) -> Unit = {},
 ) : CapturePort {
     private val running = AtomicBoolean(false)
     private var worker: Thread? = null
@@ -43,11 +44,15 @@ internal class AudioRecordCapture(
                     break
                 }
                 if (frames < 0) {
-                    terminalErrorForTest = RecognitionError(
+                    val readError = RecognitionError(
                         RecognitionErrorCode.AudioEngineFailure,
                         "AudioRecord read failed",
                         recoverable = true,
                     )
+                    terminalErrorForTest = readError
+                    if (running.get()) {
+                        onCaptureError(readError)
+                    }
                     running.set(false)
                     break
                 }
@@ -78,7 +83,10 @@ internal class AudioRecordCapture(
     override fun stop() {
         running.set(false)
         source.stop()
-        worker?.join(1_000)
+        val current = worker
+        if (current != null && current !== Thread.currentThread()) {
+            current.join(1_000)
+        }
         worker = null
     }
 

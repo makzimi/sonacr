@@ -50,9 +50,29 @@ kotlin {
 android {
     namespace = "com.localacr.shared"
     compileSdk = 34
+    ndkVersion = "27.2.12479018"
 
     defaultConfig {
         minSdk = 26
+        ndk {
+            abiFilters += listOf("arm64-v8a", "x86_64")
+        }
+        externalNativeBuild {
+            cmake {
+                arguments += listOf(
+                    "-DLACR_BUILD_TESTS=OFF",
+                    "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON",
+                )
+                targets += "local_acr_jni"
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path = file("../CMakeLists.txt")
+            version = "3.31.6"
+        }
     }
 
     compileOptions {

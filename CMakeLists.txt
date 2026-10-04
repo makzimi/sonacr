@@ -21,15 +21,24 @@ if(LACR_BUILD_TESTS)
   enable_testing()
 endif()
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Android")
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
 add_subdirectory(native/core)
 
 if(APPLE)
   add_subdirectory(native/ios)
 endif()
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Android")
+  add_subdirectory(native/android)
+endif()
+
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS" AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android")
   add_subdirectory(native/cli)
-  add_subdirectory(tools/qualification)
+  add_subdirectory(tools/probe)
+  add_subdirectory(tools/bench)
 endif()
 
 if(LACR_BUILD_TESTS)
