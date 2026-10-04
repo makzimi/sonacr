@@ -198,7 +198,7 @@ Run:
 - `cmake --build --preset macos-asan && ctest --preset macos-asan --output-on-failure`
 - `cmake --build --preset macos-tsan && ctest --preset macos-tsan --output-on-failure`
 - `cmake --build --preset ios-simulator-debug --target local_acr_ios_bridge local_acr_core`
-- `ANDROID_HOME=/Users/maxkach/Library/Android/sdk GRADLE_USER_HOME=/private/tmp/local-acr-gradle-home ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64 :shared:jvmTest :shared:testDebugUnitTest :androidApp:testDebugUnitTest :androidApp:assembleDebug --rerun-tasks --no-daemon`
+- `ANDROID_HOME=$HOME/Library/Android/sdk GRADLE_USER_HOME=/private/tmp/local-acr-gradle-home ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64 :shared:jvmTest :shared:testDebugUnitTest :androidApp:testDebugUnitTest :androidApp:assembleDebug --rerun-tasks --no-daemon`
 - `xcodebuild test -quiet -project iosApp/LocalAcrDemo.xcodeproj -scheme LocalAcrDemo -destination 'platform=iOS Simulator,id=<available-iPhone-simulator-id>' -derivedDataPath /private/tmp/local-acr-ios-derived CODE_SIGNING_ALLOWED=NO ARCHS=arm64 ONLY_ACTIVE_ARCH=YES`
 - `git diff --check`
 
@@ -208,7 +208,7 @@ Update roadmap status/evidence and commit:
 
 ```bash
 git add native/tests iosApp docs/qualification docs/superpowers/plans/2026-07-11-local-acr-master-roadmap.md docs/superpowers/plans/2026-07-11-local-acr-qualification-release.md
-git commit --author="Maxim Kachinkin <m.kachinkin@dodobrands.io>" -m "test: enforce native parity and safety"
+git commit -m "test: enforce native parity and safety"
 ```
 
 ## Checkpoint 21: Quality qualification
