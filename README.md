@@ -117,3 +117,9 @@ ctest --preset macos-clang-debug
 ## Privacy
 
 The SDK keeps microphone audio in memory only while it computes fingerprints. It never saves, uploads or logs the audio, and it makes no network requests.
+
+## License
+
+Copyright 2026 Maxim Kachinkin.
+
+Sonacr is licensed under the [Apache License 2.0](LICENSE). Third-party code in `third_party/` keeps its own license. KISS FFT and SpeexDSP use BSD-3-Clause, and SQLite is in the public domain. Their notices are in `third_party/notices/`.
