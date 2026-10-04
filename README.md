@@ -21,7 +21,7 @@ _Video coming soon. It shows the Android sample app naming a song that plays fro
 3. The matcher looks up the hashes and counts how many of them line up at the same time offset in one track. A track wins when enough hashes agree and it clearly beats the runner-up for two evaluations in a row.
 4. The app shows the title, the artist and the position in the song.
 
-One C++ engine does all of this on Android, on iOS and in the desktop tools, so a database built on a Mac gives the same results on a phone.
+One C++ engine does all of this on Android, on iOS and in the desktop tools, so a database built on a Mac gives the same results on a phone. [docs/architecture.md](docs/architecture.md) describes the pipeline, the database format and the threading model in detail.
 
 ## What works today
 
@@ -38,8 +38,10 @@ The phone misses some clips because a room and a laptop speaker destroy most of 
 Not done yet:
 
 - The iOS app runs only in the simulator and does not deliver results to the UI.
-- Recognition over the air needs to get more reliable. The plan is in [docs/superpowers/plans/2026-10-04-local-acr-ota-robustness-followup.md](docs/superpowers/plans/2026-10-04-local-acr-ota-robustness-followup.md).
+- Recognition over the air needs to get more reliable.
 - The SDK has no published package yet.
+
+The full list of remaining work is in [docs/roadmap.md](docs/roadmap.md).
 
 ## Try it on Android
 
@@ -110,7 +112,7 @@ ctest --preset macos-clang-debug
 | `shared` | Kotlin Multiplatform SDK and microphone capture |
 | `androidApp`, `iosApp` | Sample apps |
 | `tools/bench`, `tools/probe`, `tools/demo` | Benchmark, C API test client and the demo database builder |
-| `docs` | Design, plans and measured results |
+| `docs` | Architecture, roadmap and measured results |
 
 ## Privacy
 
